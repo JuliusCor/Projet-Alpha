@@ -24,5 +24,3 @@ class Text
     end
   end
 end
-
-test
