@@ -159,8 +159,6 @@ module GamePlay
       ["Prof. Pokemon",12,"Audio/BGM/2G_Radio_Professeur.mp3"],
       ["Etrange",36,"Audio/BGM/2G_Ruines_Alpha_Short.mp3"]
       ]
-      #> Vitesse de défilement des descriptions
-      @spd_descr = 180
       #-_-# FIN #-_-#
       
       #>Tableau des descriptions des radios
@@ -169,16 +167,27 @@ module GamePlay
       #         Modifié le tableau ci-dessous          #
       #       pour personnalisé la descriptions.       #
       #-_-_-_-_-_-_-# CUSTOM DESCR RADIO #-_-_-_-_-_-_-#
-      #> Ce tableau défini les descriptions de la radio. Vous pouvez rajouté autant de texte que vous souhaitez.
+      #> Ce tableau défini les descriptions de la radio.
       # DESCRIPTION DES RADIO ( Vous pouvez ajouté autant de phrases que vous le souhaitez, le script va les charger dans l'ordre )
       ["Bienvenue a la Radio 46 ! Amusez-vous bien !"],
       ["Vous écoutez actuellement la Radio Musique Pokemon !","Venez nous voir a la tour radio pour faire des échanges Pokemon !"],
       ["Ici le Prof.Pokemon, vous obtiendrez sur cette","radio des infos sur les pokémon sauvages.","Des Spinda on été aperçus sur la route 3","et des Pikachu sur la route 10 !"],
       ["LNK ET KHNMX 13 NG IHDXFHG EXZXGWTBKX","XLM IKXLXGM WTGL NG KXVHBG TN GHKW"]
       ]
+      #> Vitesse de défilement des descriptions
+      @spd_descr = 180
+      #-_-# FIN #-_-#
+      
       draw_scene
+      return_map if($game_switches[149] == true)
     end
     
+    def return_map
+      @index = 1
+      $game_switches[149] = false
+      @global_selector.set_position(36,26)
+    end
+
     def update
       super
       #Global
@@ -273,17 +282,18 @@ module GamePlay
         @bg.bitmap=RPG::Cache.interface(Background[@index])
         $game_system.se_play($data_system.decision_se)
         draw_scene
+      elsif(trigger?(:B))
+        $game_variables[102] = @freq
+        @running = false
       elsif(trigger?(:A))
         if(@index == 1)
+          @running = false
           call_scene(WorldMap)
         end
         if(@text_name[@tel_index][2] > 0)
           @running = false if(@index == 0 or @index == 1)
           draw_message if(@index == 2)
         end
-      elsif(trigger?(:B))
-        $game_variables[102] = @freq
-        @running = false
       end
     end
     

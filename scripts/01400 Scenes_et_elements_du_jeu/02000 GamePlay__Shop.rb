@@ -15,6 +15,7 @@ module GamePlay
       super()
       @viewport = Viewport.create(:main, 1000)
       @index = 0
+      $game_switches[148] = false
       #> Image de fond
       @background=Sprite.new(@viewport)
       @background.bitmap=RPG::Cache.interface(Background)
@@ -26,12 +27,12 @@ module GamePlay
       @gold_window.x = 320 - @gold_window.width
       @gold_window.windowskin = RPG::Cache.windowskin("M_1")
       #@gold_window.add_text(0,0,64,16,_get(11, 6))
-      @money_text = @gold_window.add_text(48,-6,64,16,_parse(11, 9, 
+      @money_text = @gold_window.add_text(48, 0,64,16,_parse(11, 9, 
         NUM7R => $pokemon_party.money.to_s), 2)
       #draw_gold_window
       #> Fenêtre des objets
       @item_window = ::Game_Window.new(@viewport)
-      @item_window.y = 2
+      @item_window.y = 10
       @item_window.width = 150 + wb[0]*2
       @item_window.x = 320 - @item_window.width - 2
       @item_window.height = 128 + wb[1]
@@ -54,7 +55,7 @@ module GamePlay
       @arrowup.src_rect.set(0,0,10,14)
       @arrowup.set_origin_div(2,2)
       @arrowup.angle = 90
-      @arrowup.x = 304 - 5
+      @arrowup.x = 311
       @arrowup.y = 52 - 7
       @arrowup.visible = false
       #> Arrow Down
@@ -63,8 +64,8 @@ module GamePlay
       @arrowdown.src_rect.set(0,0,10,14)
       @arrowdown.set_origin_div(2,2)
       @arrowdown.angle = -90
-      @arrowdown.x = 304 - 5
-      @arrowdown.y = 178 + 7
+      @arrowdown.x = 311
+      @arrowdown.y = 198
       @arrowdown.visible = true
       #>Interface de description
       @descr_window = ::Game_Window.new(@viewport)
@@ -216,7 +217,7 @@ module GamePlay
       #>Dessin des textes
       ini_index.step(ini_index+3) do |i|
         cnt+=1
-        @selector.y = @delta_y + cnt*32 + 8 if(i==@index)
+        @selector.y = @delta_y + cnt*32 + 16 if(i==@index)
         @price_text[cnt].visible = @name_text[cnt].visible = (i < size)
         if(i>=size)
           if i == size
@@ -237,6 +238,7 @@ module GamePlay
       
     def dispose
       super
+      $game_switches[148] = true
       @gold_window.dispose
       @item_window.dispose
       @descr_window.dispose

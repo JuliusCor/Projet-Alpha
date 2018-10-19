@@ -23,7 +23,11 @@ module GamePlay
     end
     
     def update
-      return @running = false if Input.trigger?(:B)
+      if Input.trigger?(:B)
+        $game_switches[149] = true
+        @running = false
+        call_scene(PokeMatos)
+      end
       if @mode == :fly and Input.trigger?(:A)
         fly_attempt
       end
@@ -92,22 +96,27 @@ module GamePlay
     
     def init_sprites
       @viewport = Viewport.create(:main, 2000)
-      @back = Sprite.new(@viewport).set_bitmap("world_map_back", :interface)
+      @back = Sprite.new(@viewport).set_bitmap("pokematos/world_map_back", :interface)
+      if($trainer.playing_girl)
+        @back.src_rect.set(0,32,320,32)
+      else
+        @back.src_rect.set(0,0,320,32)
+      end
       @back.set_position(0,0)
-      @map_sprite = Sprite.new(@viewport).set_bitmap("world_map", :interface)#Yuki::Utils.create_sprite(@viewport, "World_map", 0, 0, 1)
+      @map_sprite = Sprite.new(@viewport).set_bitmap("pokematos/world_map", :interface)#Yuki::Utils.create_sprite(@viewport, "World_map", 0, 0, 1)
       @map_sprite.set_position((320 - @map_sprite.width) / 2, (320 - @map_sprite.height) / 2)
-      @cursor = Sprite.new(@viewport).set_bitmap("WM_cursor", :interface)
+      @cursor = Sprite.new(@viewport).set_bitmap("pokematos/WM_cursor", :interface)
         .set_rect_div(0, 0, 1, 2)#Yuki::Utils.create_sprite(@viewport, "WM_cursor", 0, 0, 2, src_rect_div: [0, 0, 1, 2])
       x = @map_sprite.x
       y = @map_sprite.y
       x = 0 if x < 0
       y = 0 if y < 0
       @infobox = Text.new(0, @viewport, 
-        x + BitmapOffset+80,
+        x + BitmapOffset+84,
         y + BitmapOffset-40 - Text::Util::FOY,
         @map_sprite.width - 2 * BitmapOffset, 16, nil.to_s)
       @fake_selector = Sprite.new(@viewport)
-        .set_bitmap("Matos_cursor", :interface)
+        .set_bitmap("pokematos/Matos_cursor", :interface)
         .set_position(36,26)
     end
     
@@ -155,7 +164,7 @@ module GamePlay
         @infobox.text = zone.map_name
         @infobox.load_color(color)#@infobox.bitmap.draw_shadow_text(1, 0, @infobox.width, 16, zone.map_name, 0, color)
       else
-        @infobox.visible = false
+      	@infobox.text = "JOHTO" #> Nom de la région
       end
     end
     

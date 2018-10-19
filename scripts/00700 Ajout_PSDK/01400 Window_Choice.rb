@@ -33,7 +33,7 @@ class Window_Choice < Game_Window
     self.windowskin = RPG::Cache.windowskin(WindowSkin)
     self.active = true
     self.window_builder = GameData::Windows::MessageChoice if($game_switches[26] != true)
-    if($game_switches[26] == true) #> "BUREAU" PC
+    if($game_switches[26] == true or $game_switches[148] == true) #> "BUREAU" PC
       self.window_builder = GameData::Windows::MessageWindow
       @cursor_rect.y = @index * 32 + 14
     elsif($scene.class == GamePlay::Party_Menu) #> PARTY
@@ -44,7 +44,6 @@ class Window_Choice < Game_Window
       @cursor_rect.y = @index * 32 - 2
     end
     @cursor_rect.y += 1
-    @my = Mouse.y
   end
   # Update the choice, if player hit up or down the choice index changes
   def update
@@ -52,8 +51,6 @@ class Window_Choice < Game_Window
       update_cursor_down
     elsif(Input.repeat?(:UP))
       update_cursor_up
-    elsif(@my != Mouse.y || Mouse.wheel != 0)
-      update_mouse
     end
     super
   end
@@ -66,25 +63,6 @@ class Window_Choice < Game_Window
   # @return [Integer]
   def get_disable_color
     return 7
-  end
-  # Update the mouse action
-  def update_mouse
-    @my = Mouse.y
-    if(Mouse.wheel != 0)
-      Mouse.wheel > 0 ? update_cursor_up : update_cursor_down
-      return Mouse.wheel = 0
-    end
-    return unless @window.simple_mouse_in?
-    @texts.each_with_index do |text, i|
-      if text.simple_mouse_in?
-        if @index < i
-          update_cursor_down while @index < i
-        elsif @index > i
-          update_cursor_up while @index > i
-        end
-        break
-      end
-    end
   end
   # Update the choice display when player hit UP
   def update_cursor_up
@@ -135,14 +113,18 @@ class Window_Choice < Game_Window
     max = @choices.size
     max = MaxChoice if max > MaxChoice
     self.height = max * 16 + @window_builder[5] * 2
-    if($game_switches[26] == true) #> "BUREAU" PC
-      self.width = 262
-      self.width = 320 if($game_switches[147] == true)
-      self.height = 32 + 32*max
+    if($game_switches[26] == true)
+      	self.width = 262
+      	self.width = 320 if($game_switches[147] == true)#> "BUREAU" PC
+      	self.height = 32 + 32*max
     elsif($scene.class == GamePlay::Party_Menu) #> PARTY
-      self.height = max * 36 + 7
-      self.width = 220
+      	self.height = max * 36 + 7
+      	self.width = 220
     elsif($scene.class == GamePlay::Bag) #> SAC
+    	#>> EMPTY
+    elsif($game_switches[148] == true) #> SHOP
+		self.width = 176
+		self.height = 144
     else #> TOUS
       self.height += 16
     end
@@ -157,12 +139,14 @@ class Window_Choice < Game_Window
       text.gsub!(/\\[Cc]\[([0-9]+)\]/) { @colors[i] = $1.to_i ; nil}
       text.gsub!(/\\t\[(.*),(.*)\]/) do ::PFM::Text.parse($1.to_i, $2.to_i) end
       text.gsub!(/\\d\[(.*),(.*)\]/) do $daycare.parse_poke($1.to_i, $2.to_i) end
-      if($game_switches[26] == true) #> "BUREAU" PC
+      if($game_switches[26] == true)
         add_text(0, i * 32, @width+100, 48, text, 0).load_color(@colors[i])
       elsif($scene.class == GamePlay::Party_Menu) #> PARTY
         add_text(0, i * 32 + 2, @width+100, 16, text, 0).load_color(@colors[i])
       elsif($scene.class == GamePlay::Bag) #> SAC
         add_text(0, i * 26, @width+100, 32, text, 0).load_color(@colors[i])
+      elsif($game_switches[148] == true) #> SHOP
+       	add_text(0, i * 32, @width+100, 48, text, 0).load_color(@colors[i])
       else #> TOUS
         add_text(0, i * 32, @width+100, 16, text, 0).load_color(@colors[i])
       end
@@ -213,7 +197,9 @@ class Window_Choice < Game_Window
     choice_window = Window_Choice.new(width + w*2 + 16, $game_temp.choices)
     choice_window.z = intern_window.z + 1
     if($game_switches[::Yuki::Sw::MSG_ChoiceOnTop])
-      choice_window.x = choice_window.y = 0
+      	choice_window.x = choice_window.y = 0
+    elsif($game_switches[148] == true) #> SHOP
+      	choice_window.x = choice_window.y = 0
     else
       choice_window.x = intern_window.x + window.width - width - w*2 - 16 if $scene.class != GamePlay::Save
       choice_window.x = 0 if $scene.class == GamePlay::Save

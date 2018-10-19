@@ -29,7 +29,6 @@ module GamePlay
         @counter = 0
       end
       if Input.trigger?(:A)
-        @running = false
         call_scene(TBadge)
       end
       if Input.trigger?(:B)
@@ -37,7 +36,6 @@ module GamePlay
       end
       if (Input.trigger?(:RIGHT))
         call_scene(TBadge)
-        #@running = false
       end
     end
     

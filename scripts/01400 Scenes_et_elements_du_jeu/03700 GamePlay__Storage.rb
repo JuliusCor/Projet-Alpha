@@ -46,6 +46,7 @@ module GamePlay
       c = display_message("A quel PC souhaitez vous accéder ?", 1, *Start)
       case c
       when 0 # PC de Stockage
+        $game_switches[147] = true
         storage_pc
       when 1 # PC du Professeur
         professor_pc
@@ -57,7 +58,6 @@ module GamePlay
     end
 
     def storage_pc
-      $game_switches[147] = true
       c = display_message("Que faire?", 1, *Storage)
       while $game_temp.message_window_showing
         @message_window.update

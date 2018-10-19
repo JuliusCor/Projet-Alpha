@@ -94,11 +94,9 @@ module GamePlay
         @running = false
       end
       if Input.trigger?(:B)
-        #@running = false
         return_to_scene(Menu)
       end
       if (Input.trigger?(:LEFT))
-        #call_scene(TCard)
         @running = false
       end
     end
