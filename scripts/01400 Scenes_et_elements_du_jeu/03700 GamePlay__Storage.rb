@@ -3,7 +3,7 @@ module GamePlay
   class Storage < Base
     Start = ["PC DE LEO", "PC DE CHEN", "DECONNEXION"]
     # £ = signe pkmn
-    Storage = ["RANGER BOITE £", "STOCKER £", "RETIRER £",
+    Storage = ["RETIRER £", "STOCKER £", "DEPLACER £",
               "RANGER OBJETS £", "SALUT !"]
     def initialize(mode = nil)
       @viewport = Viewport.create(:main, 10000)
@@ -64,18 +64,18 @@ module GamePlay
         Graphics.update
       end
       case c
-      when 0 # Ranger les Boîtes
+      when 0 # Retirer Pokémon
         stop
-        call_scene(StorageMove)   
-      when 1 # Déposer des Pokémon
+        call_scene(StorageBoxDel)   
+      when 1 # Stocker Pokémon
         stop
-        call_scene(StorageDrop)
-      when 2 # Retirer des Pokémon 
+        call_scene(StorageBoxAdd)
+      when 2 # Deplacer Pokémon 
         stop
-        call_scene(StorageRemove)    
+        call_scene(StorageBoxMove)    
       when 3 # Réarranger des objets 
         stop
-        call_scene(StorageItems) 
+        call_scene(StorageBoxItems) 
       when 4 # Quitter
         choisir_pc
       end
@@ -121,6 +121,7 @@ module GamePlay
     def stop
       $game_switches[26] = false
     end
+    
     def dispose
       $game_switches[147] = $game_switches[26] = false
       @message_window.dispose

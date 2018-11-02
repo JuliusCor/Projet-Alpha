@@ -63,7 +63,7 @@ class Scene_NameInput
       .set_bitmap("NameInput_Selectentree", :interface)
       .set_color([1.0, 1.0, 1.0, 1.0])
     #> Sprite pokemon
-    if(character.class == PFM::Pokemon)
+    if(pokemon.class == PFM::Pokemon)
       character = sprintf("%03d%s_%d",@pokemon.id,@pokemon.shiny ? "s" : nil,@pokemon.form)
       @character = Sprite.new(@viewport)
       @character.bitmap = RPG::Cache.character(character)

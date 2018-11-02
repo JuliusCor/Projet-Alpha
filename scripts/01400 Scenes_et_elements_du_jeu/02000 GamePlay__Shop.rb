@@ -73,7 +73,7 @@ module GamePlay
       @descr_window.height = 96
       @descr_window.windowskin = @gold_window.windowskin
       @descr_window.y = 288 - @descr_window.height
-      @descr_text = @descr_window.add_text(2, 0, 280, 30, " ")
+      @descr_text = @descr_window.add_text(0, 6, 280, 32, " ")
       #@icon_sprite = Sprite.new(@viewport).
       #  set_position(@descr_window.ox + @descr_window.x + 8, @descr_window.oy + @descr_window.y + 8)
       #>Delta y pour le selecteur

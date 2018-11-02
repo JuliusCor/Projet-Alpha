@@ -112,6 +112,13 @@ module PFM
       return self.name_upper
     end
     
+    def given_name_upper11
+    result = given_name_upper
+    if result.size > 10
+      return result[0, 9] + "..."
+    end
+      return result
+    end
     # Return the nature data of the Pokemon
     # @return [Array<Integer>] [text_id, atk%, dfe%, spd%, ats%, dfs%]
     def nature_text_upper

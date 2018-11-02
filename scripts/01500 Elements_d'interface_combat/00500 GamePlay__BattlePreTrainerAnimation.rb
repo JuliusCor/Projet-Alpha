@@ -9,7 +9,6 @@ module GamePlay
     Files = ["back","battle_deg","battle_halo1","battle_halo2","black_out0"]
     Back_Player = "Back_Player"
     DegrOffset = 90
-    MaxDelta = 120
     #BALL_Animation = [0, 270, 0, 225, 0, 180, 0, 135, 1, 90, 1, 45, 1, 0, 1, 315, 2, 270, 2, 225, 2,180, 2, 135, 2, 90, 2, 45, 2, 0, 2, 30, 2, 60, 2, 90, 3, 90, 3, 135, 3, 180, 3,225, 3, 270, 3, 315, 3, 0, 3, 0, 3, 0, 4, 0, 4, 0, 4, 0, 4, 0, 4, 0, 5, 0]
     #===
     #>initialize 
@@ -19,8 +18,8 @@ module GamePlay
     #===
     def initialize(viewport, screenshot)
       @unlocked = false
-      @bg_delta = 0
-      
+      @viewport = viewport
+      @viewport.color.set(255, 255, 255, 0)
       @background = Sprite.new(viewport)
         .set_bitmap(Files[0], :transition)
       
@@ -56,9 +55,20 @@ module GamePlay
       @screen = ::Sprite.new(viewport)
       @screen.bitmap = screenshot
       @screen.zoom = Graphics.width / screenshot.width.to_f
-      @blackouts = Array.new(6) do |i| ::RPG::Cache.transition(Files[4]+(5-i).to_s) end
-      2.times do @blackouts << @blackouts[5] end
-      @blackout_counter = 0
+      #> Transition avant combat
+      #> Variable
+      @counter = 0
+      @trans_speed = 7
+      @force = 16
+      @switch = 0
+      @frame_x = 0
+      @frame_y = 0
+      #> Sprite
+      @transition = Sprite.new(@viewport)
+      @transition.bitmap = RPG::Cache.transition("Transition")
+      @transition.src_rect.set(0,0,320,288)
+      @transition.visible = false
+      #> FIN
     end
     
     #===
@@ -69,12 +79,6 @@ module GamePlay
         update_map_transition
         return true
       end
-      #>Déplacement du fond
-      #@background.set_position(@bg_delta * DX + 160, @bg_delta * DY + 120)
-      #@bg_delta += spd_calculation
-      #@bg_delta -= MaxDelta if @bg_delta >= MaxDelta
-      #Déplacement des halos
-      #Mise à jour du dégradé
       #>Mise à jour du joueur
       if(@back_player.x > 32)
         @back_player.x -= 4
@@ -111,39 +115,71 @@ module GamePlay
       end
       return true
     end
-    
     #===
     #>Mise à jour de la transition de map
     #===
     def update_map_transition
-      @blackout_counter += 1
-      generate_blackout_matrix unless @blackout_matrix
-      @blackouts.size.times do |i|
-        x = 10 - @blackout_counter / 3 + i
-        next if x >= 10 or x < 0
-        bmp = @blackouts[i]
-        8.times { |y| @blackout_matrix[x][y].bitmap = bmp }
-      end
-      dispose_map_transition if(@blackout_counter >= 100)
-    end
-    # Generate the blackout matrix
-    def generate_blackout_matrix
-      viewport = Viewport.create(:main, 10_000)
-      delta = 32
-      @blackout_matrix = Array.new(10) do |x|
-        Array.new(8) do |y|
-          Sprite.new(viewport).set_position(x * delta, y * delta)
+      if(@counter == @trans_speed*12+6)
+        @transition.visible = true
+      elsif(@counter >= @trans_speed*12+6 and @counter <= 500)
+        @transition.src_rect.set(0+320*@frame_x,0+288*@frame_y,320,288)
+        if(@switch == 2)
+          @frame_x += 1
+          if(@frame_x >= 4)
+            @frame_y += 1
+            @frame_x = 0
+          end
+          @switch = 0
+        else
+          @switch += 1
         end
+        if(@frame_y == 4)
+          @transition.src_rect.set(1280,864,320,288)
+          @counter = 980
+        end
+      #3.0
+      elsif(@counter >= @trans_speed*11 and @counter <= @trans_speed*12)
+        Graphics.brightness += @force
+      elsif(@counter >= @trans_speed*10 and @counter <= @trans_speed*11)
+        Graphics.brightness -= @force
+      elsif(@counter >= @trans_speed*9 and @counter <= @trans_speed*10)
+        @viewport.color.alpha -= @force
+      elsif(@counter >= @trans_speed*8 and @counter <= @trans_speed*9)
+        @viewport.color.alpha += @force
+      #2.0
+      elsif(@counter >= @trans_speed*7 and @counter <= @trans_speed*8)
+        Graphics.brightness += @force
+      elsif(@counter >= @trans_speed*6 and @counter <= @trans_speed*7)
+        Graphics.brightness -= @force
+      elsif(@counter >= @trans_speed*5 and @counter <= @trans_speed*6)
+        @viewport.color.alpha -= @force
+      elsif(@counter >= @trans_speed*4 and @counter <= @trans_speed*5)
+        @viewport.color.alpha += @force
+      #1.0
+      elsif(@counter >= @trans_speed*3 and @counter <= @trans_speed*4)
+        Graphics.brightness += @force
+      elsif(@counter >= @trans_speed*2 and @counter <= @trans_speed*3)
+        Graphics.brightness -= @force
+      elsif(@counter >= @trans_speed and @counter <= @trans_speed*2)
+        @viewport.color.alpha -= @force
+      elsif(@counter <= @trans_speed)
+        @viewport.color.alpha += @force
+      #end
+      elsif(@counter >= 1000)
+        dispose_map_transition
       end
+      @viewport.update if @screen
+      @counter += 1 if(@counter <= 1000)
     end
     # Dispose the map transition
     def dispose_map_transition
       @screen.bitmap.dispose
       @screen.dispose
       @screen = nil
-      @blackouts = nil
-      @blackout_matrix[0][0].viewport.dispose
-      @blackout_matrix = nil
+      @transition.dispose
+      #@blackouts = nil
+      #@blackout_matrix[0][0].viewport.dispose
+      #@blackout_matrix = nil
     end
     #===
     #>Déverrouillage pour finir l'animation

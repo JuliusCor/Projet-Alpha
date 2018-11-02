@@ -6,7 +6,11 @@ module GamePlay
         @sprite.visible=true
         @sprite_team.each { |i| i.visible=true }
         @sprite.bitmap=@pokemon.battler_face
-        @sprite.src_rect.set(8,8,112,112)
+        if(@pokemon.egg?)
+          @sprite.x = 9 
+        else
+          @sprite.x = 2
+        end
         pos=@party.index(@pokemon)
         if(pos)
           index=0
@@ -25,7 +29,6 @@ module GamePlay
           end
         end
       else
-        @sprite.visible=false
         @sprite_team.each { |i| i.visible=false }
       end
     end
@@ -51,6 +54,7 @@ module GamePlay
         @pokemon=@party[0] if @party[0]
       end
       draw_scene
+      @sprite.bitmap=@pokemon.battler_face
     end
   end
 end

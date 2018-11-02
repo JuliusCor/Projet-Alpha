@@ -398,6 +398,7 @@ class Window_Message < Game_Window
     return unless $game_temp.message_text
     @drawing_message = true
     @text_viewport.oy = 0
+    @text_viewport.oy += 14 if($scene.class == GamePlay::StorageBoxDel or $scene.class == GamePlay::StorageBoxAdd or $scene.class == GamePlay::StorageBoxMove or $scene.class == GamePlay::StorageBoxItems)
     text = $game_temp.message_text
     text = ::PFM::Text.parse_string_for_messages(text)
     text.gsub!(/\\[Gg]/) { show_gold_window }
@@ -494,6 +495,7 @@ class Window_Message < Game_Window
       self.y=96
     when 2 # En bas
       self.y=192
+      self.y=288-48 if($scene.class == GamePlay::StorageBoxDel or $scene.class == GamePlay::StorageBoxAdd or $scene.class == GamePlay::StorageBoxMove or $scene.class == GamePlay::StorageBoxItems)
     end
     self.back_opacity=($game_system.message_frame == 0 ? 255 : 0)
   end

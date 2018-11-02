@@ -39,17 +39,12 @@ module GamePlay
       _calibrate_item_list
       #>Definition des sprites
       @viewport = select_view(view(:main, 10000))
-      #>Fond
-      @background = background(nil)
-      #>Sac
-      @bag = sprite(Bag_IMG[$trainer.playing_girl ? 1 : 0], -100, -100, 1, ox_div: 2, oy_div: 12)
-      _bag_src_rect_gen
-      #> Icone
-      @icon = sprite(nil, 58, 150, 2)
-      @icon.visible = false
+      #> Fond
+      @background = Sprite.new(@viewport)
+      _adjust_background
       #> Selecteur
-      @selector = sprite("cursor_red", 106, 128, 2)
-      @selector2 = sprite("cursor_red2", 106, 128, 2)
+      @selector = sprite("cursor_red", 106, 128+1, 2)
+      @selector2 = sprite("cursor_red2", 106, 128+1, 2)
       @selector2.visible = false
       @select_order = 0
       @key = 0
@@ -59,19 +54,23 @@ module GamePlay
       @socket_text = add_text(-600, -600, 113, 23, " ", 1, 1).load_color(0)
       @quantity_text = Array.new
       @textx = Array.new
-      @name_text = Array.new(11) do |cnt|
-        #Quantité objet
-        @quantity_text << add_text(176, 48 + cnt* 32, 140, 16," ", 2)
-        #Image "X"
-        @textx[cnt] = sprite("bag_x", 256, 52 + cnt* 32, 2)
-        #Nom Objet
-        add_text(120, 32 + cnt* 32, 140, 16," ",0)
-      end
       #Description objets
       @descr_window = sprite("window_sprite_1", 0, 192, 2)
       @descr_text = add_text(16, 216, 280, 32, " ")
+      init_bag
     end
 
+    def init_bag
+      #> Objets
+      @name_text = Array.new(11) do |i|
+        #Quantité objet
+        @quantity_text << add_text(176, 48 + i* 32+1, 140, 16," ", 2)
+        #Image "X"
+        @textx[i] = Sprite.new("bag_x", 256, 52 + i* 32+1, 2)
+        #Nom Objet
+        add_text(120, 32 + i* 32+1, 140, 16," ",0)
+      end
+    end
     #===
     #>Méthode de fonctionnement générale
     #===
@@ -109,7 +108,7 @@ module GamePlay
         @item_ids=$bag.get_order(@socket)
         @item_names.clear
         @item_names=_item_name_list_gen
-        _bag_src_rect_gen
+        _adjust_background
         @index=0
         return _draw_stuff
       elsif(repeat?(:LEFT) and @mode!=:berry and !@moving)
@@ -118,7 +117,7 @@ module GamePlay
         @item_ids=$bag.get_order(@socket)
         @item_names.clear
         @item_names=_item_name_list_gen
-        _bag_src_rect_gen
+        _adjust_background
         @index=0
         return _draw_stuff
       end
@@ -162,17 +161,12 @@ module GamePlay
       end
       case @mode
       when :menu
-        choix=_bag_window(_get(22,0),_get(22,3),_get(22,177),_get(22,81),_get(22,84),_get(22,1))
+        choix=_bag_window(_get(22,0),_get(22,3),_get(22,177),_get(22,1))
         if(choix==0)
           return _use_item
         elsif(choix==1)
           return _give_item
         elsif(choix==2)
-          @selector.visible = true
-          @moving=@return_data
-          #@selector.sy = 1#@selector.src_rect.y = @selector.src_rect.height#@selector.color=Color.new(0,160,0,255)
-          return
-        elsif(choix==3)
           $bag.sort_alpha(@socket)
           @item_names.clear
           @item_names=_item_name_list_gen
@@ -180,15 +174,7 @@ module GamePlay
           @selector2.visible = false
           @select_order = 0
           return _draw_stuff
-        elsif(choix==4)
-          $bag.reset_order(@socket)
-          @item_names.clear
-          @item_names=_item_name_list_gen
-          @selector.visible = true
-          @selector2.visible = false
-          @select_order = 0
-          return _draw_stuff
-        elsif(choix==5)
+        elsif(choix==3)
           return _throw_item
         end
       when :map,:berry
@@ -252,9 +238,6 @@ module GamePlay
           @quantity_text[cnt].text = $bag.item_quantity(@item_ids[i]).to_s
         end
       end
-      @icon.bitmap = RPG::Cache.icon(GameData::Item.icon(@item_ids[@index].to_i))
-      @icon.ox = @icon.bitmap.width / 2
-      @icon.oy = @icon.bitmap.height / 2
       #>Dessin de la description
       return @descr_text.text = " " unless @item_ids[@index]
       @descr_text.multiline_text = GameData::Item.descr(@item_ids[@index])
@@ -303,13 +286,10 @@ module GamePlay
       end
     end
     #===
-    #>Génération du src_rect du sac
+    #> Changement du background du sac
     #===
-    def _bag_src_rect_gen
+    def _adjust_background
       @background.bitmap=RPG::Cache.interface("Bag_Background#{@socket}")
-      height=@bag.bitmap.height/6 #6poches
-      y=(@socket-1)*height
-      @bag.src_rect.set(0,y,@bag.bitmap.width,height)
     end
     #===
     #>Fenêtre d'action du sac
@@ -317,9 +297,6 @@ module GamePlay
     def _bag_window(*args)
       window=Window_Choice.new(240,args+[_get(22,7)])
       window.z=@viewport.z+1
-      window.x=80
-      window.y=224-window.height
-      window.height += 64
       Graphics.sort_z
       give = _get(22,3)
       throw = _get(22,1)
@@ -407,6 +384,7 @@ module GamePlay
     def sell_item
       price = GameData::Item.price(@return_data) / 2
       if(price > 0)
+      	$game_switches[147] = true
         $game_temp.num_input_variable_id = ::Yuki::Var::EnteredNumber
         $game_temp.num_input_digits_max = $bag.item_quantity(@return_data).to_s.size
         $game_temp.num_input_start = $bag.item_quantity(@return_data)
@@ -416,7 +394,7 @@ module GamePlay
         value = $game_variables[::Yuki::Var::EnteredNumber]
         if(value > 0)
           c = display_message(_parse(22,171, NUM7R => (value * price).to_s),
-          1, _get(11,27), _get(11,28))
+          1, "Oui", "Non")
           return if(c != 0)
         else
           return

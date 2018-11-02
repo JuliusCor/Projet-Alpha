@@ -1,8 +1,8 @@
 #noyard
 module GamePlay
   class TCard < Base
-    TC_Girl = "Trainer_Card_F"
-    TC_Boy = "Trainer_Card_M"
+    TC_Girl = "TCard/Trainer_Card_F"
+    TC_Boy = "TCard/Trainer_Card_M"
     include Text::Util
     include UI
     def initialize(page_id = false)

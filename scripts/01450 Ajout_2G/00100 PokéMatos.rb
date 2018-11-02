@@ -17,6 +17,7 @@ module GamePlay
       super()
       @viewport = Viewport.create(:main, 1000)
       init_text(0, @viewport)
+      @mode = $game_switches[152]
       #-_-_-_-_-# Variables Globale #-_-_-_-_-#
       # Les variables ci-dessous ne doivent pas
       #  être changé sauf si vous êtes sûr de
@@ -40,6 +41,9 @@ module GamePlay
         @icon_sex = 0
       end
       #-_-_-_-_-# Background #-_-_-_-_-#
+      @map = Sprite.new(@viewport)
+      @map.bitmap=RPG::Cache.interface("pokematos/world_map")
+      @map.y = 32
       @bg = Sprite.new(@viewport)
       @bg.bitmap=RPG::Cache.interface(Background[0])
       #-_-_-_-_-# Custom #-_-_-_-_-#
@@ -115,41 +119,48 @@ module GamePlay
       @sub_name4  = add_text(80, 62+@space_tel*7, 120, 23, "")
       @name1.visible = @name2.visible = @name3.visible = @name4.visible = false
       @sub_name1.visible = @sub_name2.visible = @sub_name3.visible = @sub_name4.visible = false
-      #> Message Telephone
-      @name_number = 16  #=> Nombres de numéros de Telephone ( Fonctionne avec les noms ci-dessous ) | DEFAULT = 8
-      #>Nom des numéros de telephone
+	  #-_-# FIN #-_-#
+	  #>Nom des numéros et leurs variables
       @text_name = [
       
       #-_-_-_-_-_-_-# CUSTOM TEL #-_-_-_-_-_-_-#
-      #     Modifié le tableau ci-dessous      #
+      #     Modifiez le tableau ci-dessous      #
       #    pour personnalisé le telephone.     #
       #-_-_-_-_-_-_-# CUSTOM TEL #-_-_-_-_-_-_-#
       #> Pour personnalisé le texte de l'appel il faut modifié l'evenement commun "51"
-      # NOM | DESCRIPTION | ACTIVE OU NON ( Fonctionne avec variable )
+      #> ATTENTION ! Fonctionne avec 4 entrées ( Si vous voulez ajouté de nouveaux numéros il faut ajouté 4 entrées )
+      #> Vous pouvez en revanche laissé vide pour n'ajouter qu'un seul element. ( Par exemple : Si vous voulez ajouté qu'un numéro vous ajouté 4 enmplacement mais 3 vide )
+      #> Veuillez tout de même ne pas mettre d'entrée vide au millieu des autres numéros.
+      #> EXEMPLE NORMAL   #> ["VINCENT","ECOLIER",$game_variables[129]]     | RESULTAT #> VINCENT : ECOLIER
+      #> EXEMPLE BLOQUER  #> ["NOM","DESCRIPTION",0]                        | RESULTAT #> ------- --------
+      #> EXEMPLE VIDE     #> ["","",""]                                     | RESULTAT #>
+      # NOM | DESCRIPTION | ACTIVE OU NON ( Fonctionne avec variable : 0 : OFF | 1 : ACTIVE )
       ["MAMAN","",$game_variables[126]],
       ["PROF.CHEN","",$game_variables[127]],
       ["LEO","",$game_variables[128]],
       ["VINCENT","ECOLIER",$game_variables[129]],
       ["RICHARD","MONTAGNARD",$game_variables[130]],
-      ["JEAN","TOP DRESSEUR",$game_variables[131]],
+      ["JEAN","TOP DRESSEUR",0],
       ["AURE","FILLETTE",$game_variables[132]],
       ["MICHAEL","POLICIER",$game_variables[133]],
       ["HUMIA","FLEURISTE",$game_variables[134]],
       ["ARNO","SCENTIFIQUE",$game_variables[135]],
-      ["MAYA","POKEFAN",$game_variables[136]],
-      ["BELINDA","ARTISTE",$game_variables[137]]
+      ["","",""],
+      ["","",""]
       ]
+      #=> Nombres de numéros de Telephone ( Ne pas touché ce calcule automatiquement)
+      @name_number = @text_name.size
       #-_-# FIN #-_-#
       
       #_____# Radio #_____#
       #>Texte du nom de la radio
-      @text_nom_radio  =     add_text(36, 140, 120, 24, "")
+      @text_nom_radio  = add_text(36, 140, 120, 24, "")
       #>Texte de la description de la radio
-      @text_descr_radio  =     add_text(18, 220, 290, 30, "")
+      @text_descr_radio  = add_text(18, 220, 290, 30, "")
       #>Tableau des radios
       @nom_radio = [
       #-_-_-_-_-_-_-# CUSTOM RADIO #-_-_-_-_-_-_-#
-      #      Modifié le tableau ci-dessous       #
+      #      Modifiez le tableau ci-dessous       #
       #       pour personnalisé la radio.        #
       #-_-_-_-_-_-_-# CUSTOM RADIO #-_-_-_-_-_-_-#
       #> Ce tableau défini le nom, l'emplacement et la musique que la radio utilisera.
@@ -164,22 +175,26 @@ module GamePlay
       #>Tableau des descriptions des radios
       @descr_radio = [
       #-_-_-_-_-_-_-# CUSTOM DESCR RADIO #-_-_-_-_-_-_-#
-      #         Modifié le tableau ci-dessous          #
+      #         Modifiez le tableau ci-dessous          #
       #       pour personnalisé la descriptions.       #
       #-_-_-_-_-_-_-# CUSTOM DESCR RADIO #-_-_-_-_-_-_-#
       #> Ce tableau défini les descriptions de la radio.
-      # DESCRIPTION DES RADIO ( Vous pouvez ajouté autant de phrases que vous le souhaitez, le script va les charger dans l'ordre )
+      # DESCRIPTION DES RADIOS ( Vous pouvez ajouté autant de phrases que vous le souhaitez, le script va les charger dans l'ordre )
       ["Bienvenue a la Radio 46 ! Amusez-vous bien !"],
       ["Vous écoutez actuellement la Radio Musique Pokemon !","Venez nous voir a la tour radio pour faire des échanges Pokemon !"],
       ["Ici le Prof.Pokemon, vous obtiendrez sur cette","radio des infos sur les pokémon sauvages.","Des Spinda on été aperçus sur la route 3","et des Pikachu sur la route 10 !"],
       ["LNK ET KHNMX 13 NG IHDXFHG EXZXGWTBKX","XLM IKXLXGM WTGL NG KXVHBG TN GHKW"]
       ]
-      #> Vitesse de défilement des descriptions
+      #> Vitesse de défilement des descriptions ( Plus haut c'est. Plus lent sera le défilement )
       @spd_descr = 180
       #-_-# FIN #-_-#
-      
+      if($game_switches[152] == true)
+      	$game_switches[152] == false
+      	@index = 1
+      	@bg.bitmap=RPG::Cache.interface(Background[@index])
+      end
       draw_scene
-      return_map if($game_switches[149] == true)
+      return_map if($game_switches[152] == true)
     end
     
     def return_map
@@ -216,19 +231,12 @@ module GamePlay
         if(@index == 2)
           @tel_index += 1 if(@tel_index < @name_number)
           @tel_selector.y += 32 #if(@tel_index < @name_number)
-          if(@tel_index == @name_number)
+          if(@text_name[@tel_index][2] == "" or @tel_index == @name_number or @tel_counter > @name_number/4)
             @tel_index = 0
             @tel_counter = 0
             @tel_selector.y = 66
             draw_tel
-          end
-          if(@tel_counter > @name_number/4)
-            @tel_index = 0
-            @tel_counter = 0
-            @tel_selector.y = 66
-            draw_tel
-          end
-          if(@tel_index == 4+4*@tel_counter)
+          elsif(@tel_index == 4+4*@tel_counter)
             @tel_counter += 1
             @tel_selector.y = 66
             draw_tel
@@ -249,12 +257,18 @@ module GamePlay
             @tel_counter -= 1
             @tel_selector.y = 162
             draw_tel
-          end
-          if(@tel_index < 0)
+          elsif(@tel_index < 0)
             @tel_counter = @name_number/4-1
             @tel_index = @name_number-1
             @tel_selector.y = 162
             draw_tel
+          end
+          3.times do
+            if(@text_name[@tel_index][2] == "")
+              @tel_index -= 1
+              @tel_selector.y -= 32
+              draw_tel
+            end
           end
         end
         if(@index == 3)
@@ -288,9 +302,11 @@ module GamePlay
       elsif(trigger?(:A))
         if(@index == 1)
           @running = false
+          $game_switches[152] = true
           call_scene(WorldMap)
         end
-        if(@text_name[@tel_index][2] > 0)
+        if(@text_name[@tel_index][2] == "")
+        elsif(@text_name[@tel_index][2] > 0)
           @running = false if(@index == 0 or @index == 1)
           draw_message if(@index == 2)
         end
@@ -333,28 +349,32 @@ module GamePlay
       @name1.visible = @name2.visible = @name3.visible = @name4.visible = true
       @sub_name1.visible = @sub_name2.visible = @sub_name3.visible = @sub_name4.visible = true
       #Nom 1
-      @name1.text = @text_name[0+(4*@tel_counter)][0]+" :"
+      @name1.text = @text_name[0+(4*@tel_counter)][0]
+      @name1.text += " :" if(@name1.text != "")
       @sub_name1.text = @text_name[0+(4*@tel_counter)][1]
       if(@text_name[0+(4*@tel_counter)][2] == 0)
         @name1.text = "----------"
         @sub_name1.text = ""
       end
       #Nom 2
-      @name2.text = @text_name[1+(4*@tel_counter)][0]+" :"
+      @name2.text = @text_name[1+(4*@tel_counter)][0]
+      @name2.text += " :" if(@name2.text != "")
       @sub_name2.text = @text_name[1+(4*@tel_counter)][1]
       if(@text_name[1+(4*@tel_counter)][2] == 0)
         @name2.text = "----------"
         @sub_name2.text = ""
       end
       #Nom 3
-      @name3.text = @text_name[2+(4*@tel_counter)][0]+" :"
+      @name3.text = @text_name[2+(4*@tel_counter)][0]
+      @name3.text += " :" if(@name3.text != "")
       @sub_name3.text = @text_name[2+(4*@tel_counter)][1]
       if(@text_name[2+(4*@tel_counter)][2] == 0)
         @name3.text = "----------"
         @sub_name3.text = ""
       end
       #Nom 4
-      @name4.text = @text_name[3+(4*@tel_counter)][0]+" :"
+      @name4.text = @text_name[3+(4*@tel_counter)][0]
+      @name4.text += " :" if(@name4.text != "")
       @sub_name4.text = @text_name[3+(4*@tel_counter)][1]
       if(@text_name[3+(4*@tel_counter)][2] == 0)
         @name4.text = "----------"

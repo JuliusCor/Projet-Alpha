@@ -223,7 +223,19 @@ module GamePlay
       end
     end
     
+    def move_party(add)
+      pos = @party.index(@pokemon)
+      if(pos)
+        pokemon = @party[(pos + add) % @party.size]
+        @pokemon = pokemon if pokemon
+      else
+        @pokemon=@party[0] if @party[0]
+      end
+      draw_scene
+    end
+    
     def pokemon_cry
+      return if(@pokemon.egg?)
       $game_system.cry_play(@pokemon.id)
       @crywait = 60
     end
@@ -268,7 +280,11 @@ module GamePlay
       end
       # Update the party and Pokemon sprite
       @sprite.bitmap = @pokemon.battler_face
-      @sprite.src_rect.set(0, 0, 112, 112)
+      if(@pokemon.egg?)
+        @sprite.x = 9 
+      else
+        @sprite.x = 2
+      end
       @sprite_team.each do |i| i.visible = false end
       if(pos = @party.index(@pokemon))
         @party.size.times do |i| draw_party_proc.call(i, pos) end

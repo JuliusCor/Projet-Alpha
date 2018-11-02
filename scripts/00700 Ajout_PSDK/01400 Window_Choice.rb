@@ -33,13 +33,20 @@ class Window_Choice < Game_Window
     self.windowskin = RPG::Cache.windowskin(WindowSkin)
     self.active = true
     self.window_builder = GameData::Windows::MessageChoice if($game_switches[26] != true)
+    @cursor_ud = 32
     if($game_switches[26] == true or $game_switches[148] == true) #> "BUREAU" PC
       self.window_builder = GameData::Windows::MessageWindow
       @cursor_rect.y = @index * 32 + 14
     elsif($scene.class == GamePlay::Party_Menu) #> PARTY
       @cursor_rect.y = @index * 32
     elsif($scene.class == GamePlay::Bag) #> SAC
-      @cursor_rect.y = @index * 26 + 6
+      if($game_switches[147] == true)
+        @cursor_rect.y = @index * 32 - 2
+      else
+        @cursor_rect.y = @index * 32 + 14
+      end
+    elsif($scene.class == GamePlay::StorageBoxDel or $scene.class == GamePlay::StorageBoxAdd or $scene.class == GamePlay::StorageBoxMove or $scene.class == GamePlay::StorageBoxItems) #> PC OLD
+      @cursor_rect.y = @index * 32 + 14
     else #> TOUS
       @cursor_rect.y = @index * 32 - 2
     end
@@ -73,13 +80,13 @@ class Window_Choice < Game_Window
     if(@choices.size > MaxChoice)
       if(@index < DeltaChoice or 
           @index > (@choices.size - DeltaChoice))
-        @cursor_rect.y -= 32
+        @cursor_rect.y -= @cursor_ud
       else
         @oy -= 32
         self.y = self.y
       end
     else
-      @cursor_rect.y -= 32
+      @cursor_rect.y -= @cursor_ud
     end
     @index -= 1
   end
@@ -94,13 +101,13 @@ class Window_Choice < Game_Window
     if(@choices.size > MaxChoice)
       if(@index < DeltaChoice or 
           @index > (@choices.size - DeltaChoice))
-        @cursor_rect.y += 32
+        @cursor_rect.y += @cursor_ud
       else
         @oy += 32
         self.y = self.y
       end
     else
-      @cursor_rect.y += 32
+      @cursor_rect.y += @cursor_ud
     end
   end
   # Change the window builder and rebuild the window
@@ -114,19 +121,29 @@ class Window_Choice < Game_Window
     max = MaxChoice if max > MaxChoice
     self.height = max * 16 + @window_builder[5] * 2
     if($game_switches[26] == true)
-      	self.width = 262
-      	self.width = 320 if($game_switches[147] == true)#> "BUREAU" PC
-      	self.height = 32 + 32*max
+    	self.width = 262
+    	self.width = 320 if($game_switches[147] == true)#> "BUREAU" PC
+    	self.height = 32 + 32*max
     elsif($scene.class == GamePlay::Party_Menu) #> PARTY
-      	self.height = max * 36 + 7
-      	self.width = 220
+    	self.height = max * 36 + 7
+    	self.width = 220
     elsif($scene.class == GamePlay::Bag) #> SAC
-    	#>> EMPTY
+      self.width = 152
+      self.height = max * 32 + 32
+      self.x = 320-self.width
+      self.y = 288-self.height
+      if(@choices.size <= 2)
+        if($game_switches[147] == true)
+          self.width = 89
+          self.height = 80
+        end
+        self.y = 288-self.height-95
+      end
     elsif($game_switches[148] == true) #> SHOP
-		self.width = 176
-		self.height = 144
+		  self.width = 176
+		  self.height = 144
     else #> TOUS
-      self.height += 16
+      self.height += 16 * max - 16
     end
     self.refresh
   end
@@ -144,9 +161,17 @@ class Window_Choice < Game_Window
       elsif($scene.class == GamePlay::Party_Menu) #> PARTY
         add_text(0, i * 32 + 2, @width+100, 16, text, 0).load_color(@colors[i])
       elsif($scene.class == GamePlay::Bag) #> SAC
-        add_text(0, i * 26, @width+100, 32, text, 0).load_color(@colors[i])
+        if($game_switches[147] == true)
+          add_text(0, i * 32, @width+100, 16, text, 0).load_color(@colors[i])
+        elsif(@choices.size <= 5)
+          add_text(0, i * 32, @width+100, 48, text, 0).load_color(@colors[i])
+        else
+          add_text(0, i * 26, @width+100, 42, text, 0).load_color(@colors[i])
+        end
       elsif($game_switches[148] == true) #> SHOP
        	add_text(0, i * 32, @width+100, 48, text, 0).load_color(@colors[i])
+      elsif($scene.class == GamePlay::StorageBoxDel or $scene.class == GamePlay::StorageBoxAdd or $scene.class == GamePlay::StorageBoxMove or $scene.class == GamePlay::StorageBoxItems) #> PC OLD
+        add_text(0, i * 32, @width+100, 48, text, 0).load_color(@colors[i])
       else #> TOUS
         add_text(0, i * 32, @width+100, 16, text, 0).load_color(@colors[i])
       end

@@ -102,6 +102,7 @@ module GamePlay
         @running = false
         @__result_process = proc do |scene|
           if(scene.call_skill_process)
+            
             @call_skill_process = scene.call_skill_process
           end
         end
