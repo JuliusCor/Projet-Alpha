@@ -5,6 +5,7 @@
 # ScriptNorm: No
 # Description: Affichage de l'animation pré combat des Pokémon
 module GamePlay
+  include UI
   class BattlePreWildAnimation < BattlePreTrainerAnimation
     Functions = [
     [:grass_init, :grass_update, :grass_dispose],
@@ -20,6 +21,10 @@ module GamePlay
       @unlocked = false
       @viewport = viewport
       @viewport.color.set(255, 255, 255, 0)
+      if($game_variables[153] == true)
+        @running = false
+        safari = GamePlay::Safari.new
+      end
       if($env.tall_grass? or $env.very_tall_grass?)
         id = 0
       else

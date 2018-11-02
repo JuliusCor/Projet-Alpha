@@ -4,3 +4,5 @@
 !scripts
 !scripts/*
 !scripts/*/*
+!data/text/*
+!data/psdk/*

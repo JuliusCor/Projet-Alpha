@@ -1,0 +1,40 @@
+fr,en
+"À Gauche : Maison de \t[29,156] Howard\nlÀ Droite : Village Péhaisse-de-Cas","To the left: \t[29,156] Howard's house\nlTo the right: PSDK Town"
+"\C[2]Ralf le Collectionneur :\C[0] Tu peux te débarasser de l'arbuste juste à côté de moi si un de tes Pokémon connait Coupe.","\c[2]Collector Ralph:\c[0] You can get rid of the {arbuste} if one of your Pokemon knows \c[1]Cut\c[0]."
+"\C[2]Ralf le Collectionneur :\C[0] Visiblement ce n'est pas le cas... Veux-tu apprendre Coupe à l'un de tes Pokémon ?","\c[2]Collector Ralph:\c[0] It looks like no Pokémon knows \c[1]Cut\c[0] in your party."
+"\C[2]Ralf le Collectionneur :\C[0] D'accord, j'apprends Coupe à ton premier Pokémon.","\c[2]Collector Ralph:\c[0] Fine, I teach your \c[1]Cut\c[0] to your first Pokémon."
+"\C[2]Ralf le Collectionneur :\C[0] Très bien. Reviens me voir si tu changes d'avis !","\c[2]Collector Ralph:\c[0] Right, come back if you change mind!"
+"Jean : Salut jeune aventurier !\nlJ'ai diverses choses à te demander, mais pour cela tu as besoin d'un journal pour retenir ce que je te demande...","Jean : Hi young {aventurier}!\nlI've many things to ask you but first you'll need a Quest book to remember everything I'll ask to you..."
+"Souhaites-tu obtenir ce journal ?","Would you like to have the quest book ?"
+"Super, je te confies deux quêtes, elles sont écrite dans le journal, reviens me voir quand tu les aura complétés !","Great, I give you two quests, they're written in the quest book, come back when you've done the quests."
+"Très bien...","All right..."
+"Jean : Tu viens pour les quêtes ?","Jean: Are you there for the quests?"
+"C'était bien un férosinge le Pokémon que j'ai vu !","It indeed was a Mankey the Pokémon I saw!"
+"Voici tes récompenses :)","Here's your {recompense} :)"
+"Tu as mis une bonne raclée à ces HootHoot, voici tes récompenses :)","{a traduire}"
+"Merci d'avoir refroidi ces HootHoot.","Thanks for chassing these Hoothoot."
+
+
+"\C[2]Gary le Scout :\C[0] \c[2]trainer_spotted(\c[1]7\c[2])\c[0] m'a permis de te repérer jusqu'à 7 cases de distance ! Faisons un petit combat pour nous échauffer."
+"\C[2]Gary le Scout :\C[0] Je ne m'attendais pas à me faire battre..."
+"\C[2]Gary le Scout :\C[0] Je t'ai battu mais je t’évite tout le trajet jusqu’au Centre Pokémon."
+"\C[2]Gary le Scout :\C[0] Viens me parler si tu souhaites m'affronter de nouveau."
+"\C[2]Gary le Scout :\C[0] Pourquoi tu me regardes comme ça ? Tu m'as déjà battu..."
+"\C[2]Gary le Scout :\C[0] Tu souhaites encore te battre ?"
+"\C[2]Gary le Scout :\C[0] Pas de problème, je comprends. Reviens me voir si tu changes d'avis."
+
+"Ce Pokémon semble vouloir vous attaquer ! En utilisant la commande \c[2]$wild_battle.init_battle(\c[1]id, level, *others\c[2])\c[1] on peut démarrer un combat contre un Pokémon sauvage sur la map. Pour un combat double contre Parasect et Paras de niveaux 24 et 15, il faut entrer \c[2]$wild_battle.init_battle(\c[1]47, 24, 46, 15\c[2])\c[0]."
+
+"La présence de cette pierre pleine de mousse signifie que dans cette zone il est possible de faire évoluer son Évoli en Phyllali !"
+
+"\C[2]Daniel le Ruinemaniac :\C[0] Je cherche un Pokémon tout rose qui lévite... Mais c'est un ""Fuyard"", du coup pas facile de tomber dessus !"
+"\C[2]Daniel le Ruinemaniac :\C[0] Tu veux savoir comment on paramètre un Pokémon fuyard ?"
+"\C[2]Daniel le Ruinemaniac :\C[0] Pour ajouter un Pokémon fuyard sur une route, il faut rentrer dans une commande script \c[2]$wild_battle.add_roaming_pokemon(\c[1]chance, proc_id, pokemon_hash\c[2])\c[0]. \c[1]chance\c[0] définit la chance de rencontrer ce Pokémon (2 donne une chance sur 2, 4 donne une chance sur 4, etc.). \c[1]proc_id\c[0] définit l'id du proc stocké dans \c[2]::PFM::Wild_RoamingInfo::RoamingProcs\c[0] à prendre pour déplacer le Pokémon. \c[1]pokemon_hash\c[0] est un hash, le même utilisé pour \c[2]ajouter_pokemon_param\c[0]."
+"\C[2]Daniel le Ruinemaniac :\C[0] Si je rentre donc \c[2]$wild_battle.add_roaming_pokemon(\c[1]5, 0, id: 151, level: 20\c[2])\c[0] dans une commande script, le joueur aura 1 chance sur 5 de rencontrer \C[3]Mew\C[0], de niveau 20 quand il marchera dans les hautes herbes."
+"\C[2]Daniel le Ruinemaniac :\C[0] Voilà, tu peux maintenant tenter de capturer ce Pokémon que je recherche. Je te donne cinq Poké Balls, bonne chance."
+
+"Les yeux de ce Mimitoss ont une couleur différente de ceux que j'ai déjà rencontré, c'est étrange !"
+
+"\C[2]Jizama le Karatéka :\C[0] J'essaye de briser ce rocher à mains nues depuis déjà deux heures. Je me sens faible."
+
+"\C[2]Howard le Montagnard :\C[0] Suivant le system_tag sur lequel tu te trouves, les Pokémon que tu rencontres sont différents. Tu le savais ? Il faut donc bien veiller à ce que tes tags soient correctement configurés ! Pour plus de réalisme, n'oublie pas également de configurer le fond de combat pour les combats contre des dresseurs afin qu'un combat en montagne se déroule vraiment dans un décors de montagnes !"

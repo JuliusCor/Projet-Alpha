@@ -110,7 +110,7 @@ module GamePlay
       when 0 #Pokédex
         call_scene(Dex)
       when 2 #Sac
-        call_scene(Bag)
+        call_scene(Safari)
       when 3 #Pokematos
         @running = false
         call_scene(PokeMatos)

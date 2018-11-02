@@ -1,0 +1,112 @@
+en,fr,de,es,it,kana,ko
+New game,Nouvelle partie,Neuer Teil,Nueva parte,Nuova parte,New game,새로운 파티
+,,,,,,
+Palbolsky,Palbolsky,Palbolsky,Palbolsky,Palbolsky,パブロスキ,Palbolsky
+Yuri,Yuri,Yuri,Yuri,Yuri,ゆり,Yuri
+,,,,,,
+,,,,,,
+: infos,: infos,: infos,: infos,: infos,: infos,: infos
+: search,: rechercher,: search,: search,: search,: search,: search
+: alt. list,: alt. liste,: alt. list,: alt. list,: alt. list,: alt. list,: alt. list
+: cancel,: retour,: cancel,: cancel,: cancel,: cancel,: cancel
+: habitat,: habitat,: habitat,: habitat,: habitat,: habitat,: habitat
+: forms,: formes,: forms,: forms,: forms,: forms,: forms
+: cry,: cri,: cry,: cry,: cry,: cry,: cry
+: cancel,: retour,: cancel,: cancel,: cancel,: cancel,: cancel
+: infos,: infos,: infos,: infos,: infos,: infos,: infos
+: sw. Pkmn,: éch. Pkmn,: sw. Pkmn,: sw. Pkmn,: sw. Pkmn,: sw. Pkmn,: sw. Pkmn
+: sw. item,: éch. objet,: sw. item,: sw. item,: sw. item,: sw. item,: sw. item
+: cancel,: retour,: cancel,: cancel,: cancel,: cancel,: cancel
+,,,,,,
+Place,Lieu,Place,Place,Place,Place,Place
+SEEN:,VUS :,SEEN:,SEEN:,SEEN:,SEEN:,SEEN:
+OBTAINED:,PRIS :,OBTAINED:,OBTAINED:,OBTAINED:,OBTAINED:,OBTAINED:
+Erase,Effacer,Erase,Erase,Erase,Erase,Erase
+Space,Espace,Space,Space,Space,Space,Space
+Caps,Maj,Caps,Caps,Caps,Caps,Caps
+Confirm,Valider,Confirm,Confirm,Confirm,Confirm,Confirm
+Exit,Quitter,Exit,Exit,Exit,Exit,Exit
+Screen Size,Taille de l'écran,Screen Size,Screen Size,Screen Size,Screen Size,Screen Size
+Change the game screen resolution.,Modifier la résoltion de l'écran de jeu.,Change the game screen resolution.,Change the game screen resolution.,Change the game screen resolution.,Change the game screen resolution.,Change the game screen resolution.
+Volume,Volume,Volume,Volume,Volume,Volume,Volume
+Change the sound volume.,Modifier le volume sonore.,Change the sound volume.,Change the sound volume.,Change the sound volume.,Change the sound volume.,Change the sound volume.
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+Trainer Memo,Mémo Dresseur,Trainer Memo,Trainer Memo,Trainer Memo,Trainer Memo,Trainer Memo
+Infos,Info Pokémon,Infos,Infos,Infos,Infos,Infos
+Skills,Aptitudes,Skills,Skills,Skills,Skills,Skills
+Moves,Capacités Combat,Moves,Moves,Moves,Moves,Moves
+Ability,Cap. Spé.,Ability,Ability,Ability,Ability,Ability
+Contests,Concours,Contests,Contests,Contests,Contests,Contests
+Ribbons,Rubans,Ribbons,Ribbons,Ribbons,Ribbons,Ribbons
+,,,,,,
+Main quests,Quêtes principales,Main quests,Main quests,Main quests,Main quests,Main quests
+Secondary quests,Quêtes secondaires,Secondary quests,Secondary quests,Secondary quests,Secondary quests,Secondary quests
+Failed quests,Quêtes échouées,Failed quests,Failed quests,Failed quests,Failed quests,Failed quests
+Cancel,Retour,Cancel,Cancel,Cancel,Cancel,Cancel
+Find %{amount} %{item_name} (%{found}),Trouver %{amount} %{item_name} (%{found}),Find %{amount} %{item_name} (%{found}),Find %{amount} %{item_name} (%{found}),Find %{amount} %{item_name} (%{found}),Find %{amount} %{item_name} (%{found}),Find %{amount} %{item_name} (%{found})
+Speak to %{name},Parler à %{name},Speak to %{name},Speak to %{name},Speak to %{name},Speak to %{name},Speak to %{name}
+See a %{name},Voir un %{name},See a %{name},See a %{name},See a %{name},See a %{name},See a %{name}
+Fight %{amount} %{name} (%{found}),Battre %{amount} %{name} (%{found}),Fight %{amount} %{name} (%{found}),Fight %{amount} %{name} (%{found}),Fight %{amount} %{name} (%{found}),Fight %{amount} %{name} (%{found}),Fight %{amount} %{name} (%{found})
+Obtain %{amount} %{name} (%{found}),Capturer %{amount} %{name} (%{found}),Obtain %{amount} %{name} (%{found}),Obtain %{amount} %{name} (%{found}),Obtain %{amount} %{name} (%{found}),Obtain %{amount} %{name} (%{found}),Obtain %{amount} %{name} (%{found})
+Beat %{name} %{amount} times (%{found}),Battre %{name} %{amount} fois (%{found}),Beat %{name} %{amount} times (%{found}),Beat %{name} %{amount} times (%{found}),Beat %{name} %{amount} times (%{found}),Beat %{name} %{amount} times (%{found}),Beat %{name} %{amount} times (%{found})
+Beat %{name},Battre %{name},Beat %{name},Beat %{name},Beat %{name},Beat %{name},Beat %{name}
+Find %{amount} eggs (%{found}),Trouver %{amount}  œufs (%{found}),Find %{amount} eggs (%{found}),Find %{amount} eggs (%{found}),Find %{amount} eggs (%{found}),Find %{amount} eggs (%{found}),Find %{amount} eggs (%{found})
+Find an egg,Trouver un œuf,Find an egg,Find an egg,Find an egg,Find an egg,Find an egg
+Hatch %{amount} eggs (%{found}),Faire éclore %{amount}  œufs (%{found}),Hatch %{amount} eggs (%{found}),Hatch %{amount} eggs (%{found}),Hatch %{amount} eggs (%{found}),Hatch %{amount} eggs (%{found}),Hatch %{amount} eggs (%{found})
+Hatch an egg,Faire éclore un œuf,Hatch an egg,Hatch an egg,Hatch an egg,Hatch an egg,Hatch an egg
+ type %s, de type %s, type %s, type %s, type %s, type %s, type %s
+ nature %s, ayant la nature %s, nature %s, nature %s, nature %s, nature %s, nature %s
+ level %d, au niveau %d, level %d, level %d, level %d, level %d, level %d
+ having minimum level %d, de niveau %d minimum, having minimum level %d, having minimum level %d, having minimum level %d, having minimum level %d, having minimum level %d
+ to maximum level %d, au niveau %d maximum, to maximum level %d, to maximum level %d, to maximum level %d, to maximum level %d, to maximum level %d
+ having maximum level %d, de niveau %d maximum, having maximum level %d, having maximum level %d, having maximum level %d, having maximum level %d, having maximum level %d
+,,,,,,
+Weight: %.2f kg,Poids : %.2f kg,Weight: %.2f kg,Weight: %.2f kg,Weight: %.2f kg,Weight: %.2f kg,Weight: %.2f kg
+Height: %.2f m,Taille : %.2f m,Height: %.2f m,Height: %.2f m,Height: %.2f m,Height: %.2f m,Height: %.2f m
+,,,,,,
+Palbolsky's PC,PC de Palbolsky,Palbolsky's PC,Palbolsky's PC,Palbolsky's PC,Palbolsky's PC,Palbolsky's PC
+Professor's PC,PC du Professeur,Professor's PC,Professor's PC,Professor's PC,Professor's PC,Professor's PC
+Turn off,Déconnexion,Turn off,Turn off,Turn off,Turn off,Turn off
+,,,,,,
+Organize Boxes,Ranger les Boîtes,Organize Boxes,Organize Boxes,Organize Boxes,Organize Boxes,Organize Boxes
+Withdraw Pokémon,Déposer des Pokémon,Withdraw Pokémon,Withdraw Pokémon,Withdraw Pokémon,Withdraw Pokémon,Withdraw Pokémon
+Deposit Pokémon,Retirer des Pokémon,Deposit Pokémon,Deposit Pokémon,Deposit Pokémon,Deposit Pokémon,Deposit Pokémon
+Manage items,Réarranger des objets,Manage items,Manage items,Manage items,Manage items,Manage items
+See ya!,Quitter,See ya!,See ya!,See ya!,See ya!,See ya!
+,,,,,,
+%s booted up the PC.,%s allume le PC.,%s booted up the PC.,%s booted up the PC.,%s booted up the PC.,%s booted up the PC.,%s booted up the PC.
+,A quel PC souhaitez-vous accéder ?,,,,,
+,Que voulez-vous faire ?,,,,,
+Professor seems afk...,Le professeur semble absent pour le moment...,Professor seems afk...,Professor seems afk...,Professor seems afk...,Professor seems afk...,Professor seems afk...
+Cancel trade ?,Voulez-vous annuler l'échange ?,Cancel trade ?,Cancel trade ?,Cancel trade ?,Cancel trade ?,Cancel trade ?
+Choose the theme.\nlUse left and right arrow to switch theme.,Choisissez votre thème.\nl(Flèche gauche et droite pour changer de thème.),Choose the theme.\nlUse left and right arrow to switch theme.,Choose the theme.\nlUse left and right arrow to switch theme.,Choose the theme.\nlUse left and right arrow to switch theme.,Choose the theme.\nlUse left and right arrow to switch theme.,Choose the theme.\nlUse left and right arrow to switch theme.
+The new theme was registered.,Le nouveau thème a été enregistré.,The new theme was registered.,The new theme was registered.,The new theme was registered.,The new theme was registered.,The new theme was registered.
+Trade,Échanger,Trade,Trade,Trade,Trade,Trade
+%s holds no item.,%s ne tient rien.,%s holds no item.,%s holds no item.,%s holds no item.,%s holds no item.,%s holds no item.
+,,,,,,
+,,,,,,
+Do you accept the trade ?,Acceptez-vous l'échange ?,Do you accept the trade ?,Do you accept the trade ?,Do you accept the trade ?,Do you accept the trade ?,Do you accept the trade ?
+Yes,Oui,Yes,Yes,Yes,Yes,Yes
+No,Non,No,No,No,No,No
+You declined the trade[WAIT 40].[WAIT 40].[WAIT 40].,Vous refusez l'échange[WAIT 40].[WAIT 40].[WAIT 40].,You declined the trade[WAIT 40].[WAIT 40].[WAIT 40].,You declined the trade[WAIT 40].[WAIT 40].[WAIT 40].,You declined the trade[WAIT 40].[WAIT 40].[WAIT 40].,You declined the trade[WAIT 40].[WAIT 40].[WAIT 40].,You declined the trade[WAIT 40].[WAIT 40].[WAIT 40].
+Trade done! (Animation will come later),Echange effectué (l'animation c'est pour plus tard),Trade done! (Animation will come later),Trade done! (Animation will come later),Trade done! (Animation will come later),Trade done! (Animation will come later),Trade done! (Animation will come later)
+Trade canceled...,L'échange a été annulé...,Trade canceled...,Trade canceled...,Trade canceled...,Trade canceled...,Trade canceled...
+Give up ?,Voulez-vous abandonner ?,Give up ?,Give up ?,Give up ?,Give up ?,Give up ?
+Your partner declined the trade.,Votre partenaire a refusé l'échange.,Your partner declined the trade.,Your partner declined the trade.,Your partner declined the trade.,Your partner declined the trade.,Your partner declined the trade.
+Do you wanna trade with %s (%05d)?,Voulez-vous échanger avec %s (%05d) ?,Do you wanna trade with %s (%05d)?,Do you wanna trade with %s (%05d)?,Do you wanna trade with %s (%05d)?,Do you wanna trade with %s (%05d)?,Do you wanna trade with %s (%05d)?
+"Your code is \c[2]%s\c[0], give it to your partner...\nlYou can use CTRL+C to copy the code.","Votre code est \c[2]%s\c[0], donnez le à votre partenaire...\nlVous pouvez utiliser CTRL+C pour le copier.","Your code is \c[2]%s\c[0], give it to your partner...\nlYou can use CTRL+C to copy the code.","Your code is \c[2]%s\c[0], give it to your partner...\nlYou can use CTRL+C to copy the code.","Your code is \c[2]%s\c[0], give it to your partner...\nlYou can use CTRL+C to copy the code.","Your code is \c[2]%s\c[0], give it to your partner...\nlYou can use CTRL+C to copy the code.","Your code is \c[2]%s\c[0], give it to your partner...\nlYou can use CTRL+C to copy the code."
+PSDK wasn't able to port forward the server...,PSDK n'a pas réussi à ouvrir un port...,PSDK wasn't able to port forward the server...,PSDK wasn't able to port forward the server...,PSDK wasn't able to port forward the server...,PSDK wasn't able to port forward the server...,PSDK wasn't able to port forward the server...
+Enter your partner code.\nlYou can use CTRL+V to paste it.,Entrez le code de votre partenaire.\nlVous pouvez utiliser CTRL+V pour le coller.,Enter your partner code.\nlYou can use CTRL+V to paste it.,Enter your partner code.\nlYou can use CTRL+V to paste it.,Enter your partner code.\nlYou can use CTRL+V to paste it.,Enter your partner code.\nlYou can use CTRL+V to paste it.,Enter your partner code.\nlYou can use CTRL+V to paste it.
+Invalid code! Try another one ?,"Le code est invalide, désirez réentrer le code ?",Invalid code! Try another one ?,Invalid code! Try another one ?,Invalid code! Try another one ?,Invalid code! Try another one ?,Invalid code! Try another one ?
+Your partner isn't connected with this code...\nlTry with another one ?,Le partenaire désigné par le code ne répond pas...\nlDésirez vous entrer un autre code ?,Your partner isn't connected with this code...\nlTry with another one ?,Your partner isn't connected with this code...\nlTry with another one ?,Your partner isn't connected with this code...\nlTry with another one ?,Your partner isn't connected with this code...\nlTry with another one ?,Your partner isn't connected with this code...\nlTry with another one ?
+"\c[2]Warning, you're trading on a local network.","\c[2]Attention, votre échange se fait sur le réseau local.","\c[2]Warning, you're trading on a local network.","\c[2]Warning, you're trading on a local network.","\c[2]Warning, you're trading on a local network.","\c[2]Warning, you're trading on a local network.","\c[2]Warning, you're trading on a local network."
+Your partner given up...,Votre partenaire a abandonné l'échange.,Your partner given up...,Your partner given up...,Your partner given up...,Your partner given up...,Your partner given up...
+Connexion reset.,La connexion a été interrompue.,Connexion reset.,Connexion reset.,Connexion reset.,Connexion reset.,Connexion reset.

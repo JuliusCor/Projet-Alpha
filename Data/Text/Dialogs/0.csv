@@ -1,0 +1,12 @@
+en,fr,es
+Welcome to this \c[1]Pokémon SDK\c[0] test. The FollowMe script and your appearence are set up by your choices.,Bienvenue sur ce test de \c[1]Pokémon SDK\c[0]. Le FollowMe et votre apparence vont être configurés en fonction de vos choix.,Advertencia: traducido por Google\nlBienvenido a esta prueba de Pokémon SDK. Los Pokémon que te siguen y su apariencia se configurarán de acuerdo con sus elecciones.
+"Would you like a Pokémon following you on the map (FollowMe script) ?
+",Souhaitez-vous activer la fonctionnalité de Pokémon suiveur (ou FollowMe) ?,¿Deseas que los Pokémon te sigan?
+Yes,Oui,Sí
+No,Non,No
+Would you like to look like a girl or a boy ?,Souhaitez-vous prendre l'apparence de la fille ou du garçon ?,¿Quieres parecer una chica o un chico?
+"To tell PSDK the trainer gender of the player, use the script command : \c[2]$trainer.set_gender(\c[1]false\c[2])\c[0]. \nlfalse means trainer is a ""boy"", true means the trainer is a ""girl"".","Pour déterminer le sexe du joueur, en fonction de son choix, il suffit d'entrer dans une commande de script ""\c[2]$trainer.set_gender(\c[1]false\c[2])\c[0]"". \nlL'argument vaut ""true"" si le joueur choisit la fille, et ""false"" s'il choisit le garçon.","Para cambiar el género del entrenador mientras juegas, usa este comando en la consola: \c[2]$trainer.set_gender(\c[1]false\c[2])\c[0]. \nlfalse cambia el género a masculino, true cambia el género a femenino."
+"Initializing berry plants using \c[2]Yuki::Berries.init_berry(\c[1]id_map, id_event, id_berry\c[2])\c[0]...","Initialisation des baies au moyen de la commande \c[2]Yuki::Berries.init_berry(\c[1]id_map, id_event, id_baie\c[2])\c[0]...","Inicializando plantas de bayas utilizando \c[2]Yuki::Berries.init_berry(\c[1]id_map, id_event, id_berry\c[2])\c[0] ..."
+"For this test, you'll get a \c[3]Pikachu\C[0] and a \C[3]Meowth\C[0] level 25 with the \C[1]Pickup\C[0] ability!","Pour ce test, nous allons vous donner un \C[3]Pikachu\C[0] et un \C[3]Miaouss\C[0] de niveau 25 pour tester le talent \C[1]Ramassage\C[0].","¡Para esta prueba, obtendrás un \C[3]Pikachu\C[0] y un \C[3]Meowth\C[0] de nivel 25 con la habilidad \C[1]Recogida\C[0]!"
+Girl,Fille,Chica
+Boy,Garçon,Chico
