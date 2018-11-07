@@ -20,15 +20,7 @@ module Yuki
 
     Data[0][:exclamation] = {
     :enter=>{:max_counter=>36,:data => 
-    [{:file=>"emotions",:rect=>[0,0,16,16],:zoom=>1,:position=>:center_pos, :add_z => -1, :oy_offset => 0},
-    nil,{:oy_offset => 2},
-    nil,{:oy_offset => 4},
-    nil,{:oy_offset => 8},
-    nil,{:oy_offset => 12},
-    nil,{:oy_offset => 16, :add_z => 64},
-    nil,{:oy_offset => 20},
-    nil,{:oy_offset => 24},
-    nil,{:oy_offset => 20}],
+    [{:file=>"Exclamation",:zoom=>1,:position=>:center_pos, :add_z => 64, :oy_offset => 19}],
     :loop=>false},
     :stay=>{:max_counter=>2,:data=>[{:state => :leave}], :loop=>false},
     :leave =>Data[0][2][:leave]}
