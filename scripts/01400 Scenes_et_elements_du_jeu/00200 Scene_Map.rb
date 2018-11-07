@@ -157,7 +157,11 @@ class Scene_Map
     # バトル画面に切り替え
     case $game_variables[::Yuki::Var::BT_Mode]
     when 0
-      $scene = Scene_Battle.new
+      if($game_switches[154] == true)
+        $scene = GamePlay::Safari.new
+      else
+        $scene = Scene_Battle.new
+      end
     when 1
       $scene = Scene_Battle_Server.new
     when 2

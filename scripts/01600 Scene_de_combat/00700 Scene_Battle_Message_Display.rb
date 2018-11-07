@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 #noyard
 # Description: Affichage / Interpretation des messages du BattleEngine
 class Scene_Battle

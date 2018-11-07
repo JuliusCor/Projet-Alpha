@@ -54,10 +54,10 @@ module GamePlay
       @socket_text = add_text(-600, -600, 113, 23, " ", 1, 1).load_color(0)
       @quantity_text = Array.new
       @textx = Array.new
+      init_bag
       #Description objets
       @descr_window = sprite("window_sprite_1", 0, 192, 2)
       @descr_text = add_text(16, 216, 280, 32, " ")
-      init_bag
     end
 
     def init_bag
@@ -66,7 +66,7 @@ module GamePlay
         #Quantité objet
         @quantity_text << add_text(176, 48 + i* 32+1, 140, 16," ", 2)
         #Image "X"
-        @textx[i] = Sprite.new("bag_x", 256, 52 + i* 32+1, 2)
+        @textx[i] = sprite("bag_x", 256, 52 + i* 32+1, 2)
         #Nom Objet
         add_text(120, 32 + i* 32+1, 140, 16," ",0)
       end
@@ -264,6 +264,11 @@ module GamePlay
         end
       end
       @key = 0
+    end
+    #===
+    #>Génération du src_rect du sac
+    #===
+    def _bag_src_rect_gen
     end
     #===
     #> Correction de la socket en fonction des conditions

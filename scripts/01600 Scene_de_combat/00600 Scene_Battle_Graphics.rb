@@ -5,46 +5,17 @@
 # ScriptNorm: No
 # Description: Gestion des graphismes de combat
 class Scene_Battle
-  BackNames=["back_building","back_grass","back_tall_grass","back_taller_grass",
-    "back_cave","back_mount","back_pond","back_sea","back_under_water",
-    "back_ice","back_snow","back_sand"]
   #===
   #>Affichage du fond de combat
   #===
   def gr_display_background()
-    if($game_temp.battleback_name and $game_temp.battleback_name.size > 0)
-      @battleback_name = $game_temp.battleback_name
-    else
-      v=0
-      env = $env
-      if(env.grass?)
-        v=1
-      elsif(env.tall_grass?)
-        v=2
-      elsif(env.very_tall_grass?)
-        v=3
-      elsif(env.cave?)
-        v=4
-      elsif(env.mount?)
-        v=5
-      elsif(env.pond?)
-        v=6
-      elsif(env.sea?)
-        v=7
-      elsif(env.under_water?)
-        v=8
-      elsif(env.ice?)
-        v=9
-      elsif(env.snow?)
-        v=10
-      elsif(env.sand?)
-        v=11
-      end
-      @battleback_name = BackNames[v]
-    end
     @background=Sprite.new(@viewport)
-    @background.z=0
-    @background.bitmap=RPG::Cache.battleback(@battleback_name)
+    @background.bitmap=RPG::Cache.interface("battle/battleback")
+    @background.z = 0
+    @bgwindow=Sprite.new(@viewport)
+    @bgwindow.bitmap=RPG::Cache.interface("battle/Window_1")
+    @bgwindow.z = 1
+    @bgwindow.y = 288-94
   end
 
   #===
@@ -57,12 +28,6 @@ class Scene_Battle
     Graphics.transition(1)
     Graphics.update while(animator.update) #> Démarrage de la séquence de combat
     @message_window.blocking = true #>Forcer l'appui pour passer les messages
-    if($trainer.playing_girl)
-      @back_player.src_rect.set(96,0,96,96)
-    else
-      @back_player.src_rect.set(0,0,96,96)
-    end
-    move_back
     animator.unlock
     Graphics.update while(animator.update)
     Audio.se_play(@enemies[0].cry)
@@ -76,11 +41,41 @@ class Scene_Battle
       display_message(_parse(18,1, PKNAME[0] => @enemies[0].name)+"\n"+
       _parse(18,1, PKNAME[0] => @enemies[1].name))
     end
+    animator.del_back
+    @back_player.x = 38.92
+    @state = 1
     gr_initialize_main_sprites
     animator.dispose
     @stuff_to_update.clear
   end
-  
+
+  def move_back
+    Graphics.wait(1)
+    @back_player.x -= 3.46
+    @back_player.bitmap=RPG::Cache.interface("Back_Player")
+      if($trainer.playing_girl)
+        @back_player.src_rect.set(96,0,96,96)
+      else
+        @back_player.src_rect.set(0,0,96,96)
+      end
+    @backframe += 1
+    move_back if(@backframe <= 110)
+    if(@backframe >= 110 and @state == 0)
+      @state =+ 1
+      @a_window_Balls.visible = @a_remaining_pk.visible = true
+      Audio.se_play("Audio/SE/2G_Bip_Battle.wav")
+    elsif(@backframe >= 110 and @state == 1)
+      @a_remaining_pk.visible = @a_window_Balls.visible = false
+    end
+  end
+
+  def gr_actor_move
+    if($game_switches[153] != true)
+      @backframe = 60
+      move_back
+    end
+  end
+
   #===
   #>Pré animation des dresseurs
   #===
@@ -93,10 +88,10 @@ class Scene_Battle
     @stuff_to_update << animator
     @message_window.visible = false
     Graphics.transition(1)
-    Graphics.update while(animator.update) #>Déplacement du dresseur
-    @message_window.blocking = true#true #>Forcer l'appui pour passer les messages
-    @a_window_Balls.visible = @a_remaining_pk.visible = true
-    @back_player.bitmap=RPG::Cache.interface(Back_player[0])
+    Graphics.update while(animator.update) #> Démarrage de la séquence de combat
+    @message_window.blocking = true #>Forcer l'appui pour passer les messages
+    @a_window_Balls.visible = @a_remaining_pk.visible = @e_remaining_pk.visible = @e_window_Balls.visible = true
+    @back_player.bitmap=RPG::Cache.interface("Back_Player")
     if($trainer.playing_girl)
       @back_player.src_rect.set(96,0,96,96)
     else
@@ -282,14 +277,9 @@ class Scene_Battle
     sp.visible = false
   end
   
-  def gr_actor_move
-    @backframe = 60
-    move_back
-  end
-  
   def gr_launch_ball
     #> Animation d'ouverture des pokéball
-    @a_remaining_pk.visible = @a_window_Balls.visible = false
+    #@a_remaining_pk.visible = @a_window_Balls.visible = false
     @open_ball.visible = true
     @open_ball.src_rect.set(80,0,80,80)
     #> Son d'ouverture

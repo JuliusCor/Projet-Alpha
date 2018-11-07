@@ -21,10 +21,6 @@ module GamePlay
       @unlocked = false
       @viewport = viewport
       @viewport.color.set(255, 255, 255, 0)
-      if($game_variables[153] == true)
-        @running = false
-        safari = GamePlay::Safari.new
-      end
       if($env.tall_grass? or $env.very_tall_grass?)
         id = 0
       else
@@ -33,7 +29,7 @@ module GamePlay
       @functions = Functions[id]
       
       @ground = GamePlay::BattleGrounds.new(viewport, false)
-      @delta_x = delta_x = 432 - @ground.x #233 #350
+      @delta_x = delta_x = 0 - 48 - @ground.x #233 #350
       @delta_y = delta_y = 89 - @ground.y
       @ground.x += delta_x
       @ground.y += delta_y
@@ -69,6 +65,17 @@ module GamePlay
       @switch = 0
       @trans_speed = 7
       @force = 16
+      #> Dresseur joueur
+      @back_player=Sprite.new(@viewport)
+      @back_player.bitmap=RPG::Cache.interface(Back_Player)
+      @back_player.x = 320
+      @back_player.y = 96
+      @back_player.z = 44000
+      if($trainer.playing_girl)
+        @back_player.src_rect.set(96,96,96,96)
+      else
+        @back_player.src_rect.set(0,96,96,96)
+      end
     end
     #===
     #>Mise à jour de la scène
@@ -78,7 +85,7 @@ module GamePlay
         update_map_transition
         return true
       else
-        return send(@functions[1])
+      	nothing_update
       end
     end
     #===
@@ -137,7 +144,6 @@ module GamePlay
         @screen.dispose
         @screen = nil
         @counter = 119
-        send(@functions[1])
       end
       @viewport.update if @screen
       @counter += 1 if(@counter <= 1000)
@@ -154,17 +160,23 @@ module GamePlay
       end
       @ground.dispose
     end
+
+    #===
+    def del_back
+      @back_player.dispose
+    end
+    #===
+
     #===
     #>repos_enemy
     # Repositionnement des enemis au bon endroit
     #===
     def repos_enemy
       @enemies.each do |i|
-        i.x -= @delta_x
-        i.y -= @delta_y
+        i.x += 3.47
+        @back_player.x -= 3.47
       end
-      @ground.x -= @delta_x
-      @ground.y -= @delta_y
+      @ground.x = -100
     end
     #===
     #>recolorise_enemy
@@ -184,16 +196,15 @@ module GamePlay
     
     def nothing_update
       if(@counter <= 90)
-        if(@counter > 60)
-          i = $scene.message_window
-          i.visible = true unless i.visible
-          i.opacity = 255*(@counter - 59)/30
-        end
-      elsif(@counter <= 120)
-        recolorise_enemy
       elsif(@unlocked)
-        if(@counter <= 150)
+        if(@counter <= 200)
           repos_enemy
+        elsif(@counter <= 201)
+          if($trainer.playing_girl)
+	        @back_player.src_rect.set(96,0,96,96)
+	      else
+	        @back_player.src_rect.set(0,0,96,96)
+	      end
         else
           return false
         end
@@ -210,78 +221,12 @@ module GamePlay
     #>Transition de l'herbe
     #===
     def grass_init
-      #Herbe du fond
-      @layer1 = Sprite.new(@viewport)
-      @layer1.bitmap = RPG::Cache.transition("ecd_poke03")
-      @layer1.y = 240 - 128
-      @layer11 = Sprite.new(@viewport)
-      @layer11.bitmap = @layer1.bitmap
-      #Herbe de devant
-      @layer2 = Sprite.new(@viewport)
-      @layer2.bitmap = RPG::Cache.transition("ecd_poke01")
-      @layer22 = Sprite.new(@viewport)
-      @layer22.bitmap = RPG::Cache.transition("ecd_poke02")
-      @layer22.x = @layer11.x = 256
-      @layer22.y = @layer2.y = @layer11.y = @layer1.y
-      @layer2.ox = @layer22.ox = 512
-      @layer11.ox = @layer1.ox = -320
-      #>Fond noir qui se déplace
-      @black = Sprite.new(@viewport)
-      @black.bitmap = Bitmap.new(448, 240)
-      @black.bitmap.fill_rect(128,0,320,240, Color.new(0,0,0))
-      bmp = RPG::Cache.transition("ecd_z01")
-      @black.bitmap.blt(0,0, bmp, bmp.rect)
-      @black.ox = 128
-      
-      @black.z = 99999
-      @layer1.z = 101
-      @layer11.z = 102
-      @layer2.z = 103
-      @layer22.z = 104
-      @black.visible = @layer2.visible = @layer22.visible = @layer1.visible = 
-      @layer11.visible = false
     end
     
     def grass_update
-      return false
-      if(@counter == 0)
-        @black.visible = @layer2.visible = @layer22.visible = @layer1.visible = 
-        @layer11.visible = true
-      elsif(@counter <= 30)
-        @black.ox -= 16
-        @layer2.ox = (@layer22.ox -= 16) 
-        @layer11.ox = (@layer1.ox += 16)
-      elsif(@counter <= 90)
-        @layer2.ox = (@layer22.ox -= 8) 
-        @layer11.ox = (@layer1.ox += 8)
-        if(@counter > 60)
-          @layer2.opacity = @layer22.opacity = @layer11.opacity = (@layer1.opacity -= 9)
-          i = $scene.message_window
-          i.visible = true unless i.visible
-          i.opacity = 255*(@counter - 59)/30
-        end
-      elsif(@counter <= 120)
-        recolorise_enemy
-      elsif(@unlocked)
-        if(@counter <= 150)
-          repos_enemy
-        else
-          return false
-        end
-      else
-        return false
-      end  
-      @counter += 20
-      return true
     end
     
     def grass_dispose
-      @black.bitmap.dispose
-      @black.dispose
-      @layer1.dispose
-      @layer11.dispose
-      @layer2.dispose
-      @layer22.dispose
     end
     
     def get_sprite(i)

@@ -3,12 +3,11 @@ class Scene_Battle
   #
   # This interface is used during battle and allows the user to choose an action on a specific Pokemon
   class Action_Selector < UI::SpriteStack
-    Bar="Choice_4"
     Selector="Choice_Select"
     # Creates a new Action Selector interface
     def initialize
       super(nil)
-      push(0, 0, "choice_4").z = 10005
+      push(96, 194, "battle/choice_1").z = 10005 if($game_switches[153] != true)
       @select_sprite = push(0, 0, "cursor_black")
       @select_sprite.z = z = 10006
       #-_-_-_-_-# PATTERN #-_-_-_-_-#
@@ -17,10 +16,18 @@ class Scene_Battle
       #-_-_-_-_-# PATTERN #-_-_-_-_-#
       @textx = 128
       @texty = 224
-      add_text(@textx,    @texty,    100, 16, _get(32,0), 0, color: 0).set_size(16).z = z #ATTAQUE
-      push(    @textx+96, @texty,    "pkmn")                                       .z = z #POKEMON
-      add_text(@textx,    @texty+32, 100, 16, _get(32,1), 0, color: 0).set_size(16).z = z #SAC
-      add_text(@textx+96, @texty+32, 100, 16, _get(32,3), 0, color: 0).set_size(16).z = z #FUITE
+      if($game_switches[153] == true)
+        @textx = 32
+        add_text(@textx, @texty, 100, 16, "BALLx" + $game_variables[113].to_s, 0, color: 0).z = z            # => SAFARI : BALL
+        add_text(@textx+168, @texty, 100, 16, "APPAT", 0, color: 0).z = z        # => SAFARI : APPAT
+        add_text(@textx, @texty+32, 100, 16, "CAILLOU", 0, color: 0).z = z      # => SAFARI : CAILLOU
+        add_text(@textx+168, @texty+32, 100, 16, _get(32,3), 0, color: 0).z = z  # => SAFARI : FUITE
+      else
+        add_text(@textx, @texty, 100, 16, _get(32,0), 0, color: 0).z = z        # => ATTAQUE
+        push(@textx+96, @texty, "pkmn").z = z                                   # => POKEMON
+        add_text(@textx, @texty+32, 100, 16, _get(32,1), 0, color: 0).z = z     # => SAC
+        add_text(@textx+96, @texty+32, 100, 16, _get(32,3), 0, color: 0).z = z  # => FUITE
+      end
       self.visible = false
       self.pos_selector(0)
     end
@@ -34,15 +41,19 @@ class Scene_Battle
       case action_index
       when 0 #> Attaquer
         sprite.x = 114
+        sprite.x -= 96 if($game_switches[153] == true)
         sprite.y = 224
       when 1 #> Pokémon
         sprite.x = 114 + 96
+        sprite.x -= 24 if($game_switches[153] == true)
         sprite.y = 224
       when 2 #> Sac
         sprite.x = 114
+        sprite.x -= 96 if($game_switches[153] == true)
         sprite.y = 224 + 32
       else #> Fuite
         sprite.x = 114 + 96
+        sprite.x -= 24 if($game_switches[153] == true)
         sprite.y = 224 + 32
       end
     end

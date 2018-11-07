@@ -1,12 +1,10 @@
-# Header: psdk.pokemonworkshop.com/index.php/ScriptHeader
-# Author: Nuri Yuri
-# Date: 2014
-# Update: 2017-03-04
-# ScriptNorm: No
+#encoding: utf-8
+
+#noyard
 # Description: Définition de la fenêtre de message des combats
 class Scene_Battle
   class Window_Message < ::Window_Message
-    WindowSkin = "M_1"
+    WindowSkin = "M_1" #CHECKWINDOW
     PauseSkin = "Pause2"
     S_sl="\\"
     S_000="\000"
@@ -73,27 +71,6 @@ class Scene_Battle
       end
       return false
     end
-=begin
-    #OK
-    def generate_text_instructions(text)
-    max_width = 26 + @width - (@windowskin.width - @window_builder[0] - @window_builder[2]) - @ox - 2
-    markers = []
-    text.gsub!(/([\x01-\x03])\[([0-9]+)\]/) do  markers << [$1.getbyte(0), $2.to_i]; S_000 end
-    texts = text.split(S_000)
-    if(texts.first.size > 0) # when blabla\c[1]blabla
-      markers.insert(0,[1, 0])
-    else
-      texts.shift
-    end
-    instructions = []
-    x = 0
-    texts.each do |text|
-      x = adjust_text_lines(x, max_width, text, instructions)
-    end
-    @markers = markers
-    @instructions = instructions
-  end
-=end
     # Fade the window message out
     # @return [Boolean] if the update function skips
     def update_fade_out
@@ -112,7 +89,7 @@ class Scene_Battle
       if($game_system.battle_interpreter.running?)
         case $game_system.message_position
         when 0 # En Haut
-          self.y=0
+          self.y=2
         when 1 # Au centre
           self.y=96
         when 2 # En bas

@@ -1,8 +1,6 @@
-# Header: psdk.pokemonworkshop.com/index.php/ScriptHeader
-# Author: Nuri Yuri
-# Date: 2014
-# Update: 2014-mm-dd
-# ScriptNorm: No
+#encoding: utf-8
+
+#noyard
 # Description: Animations graphique des combats
 class Scene_Battle
   def gr_switch_form(pkm)
@@ -39,22 +37,22 @@ class Scene_Battle
       BattleEngine::Abilities.on_launch_ability(pkm)
     end
   end
-  
+
   #ChargeAnimation = load_data("Data/Animations/charge.dat")
   def animation(launcher, target, skill)
-    
+
     enn=(launcher.position<0)
     spa=(enn ? @enemy_sprites[-launcher.position-1] : @actor_sprites[launcher.position])
     #/!\ Récupérer les cibles en fonction de la propriété de l'attaque
     enn=(target.position<0)
     spb=(enn ? @enemy_sprites[-target.position-1] : @actor_sprites[target.position])
-    
+
     if $options.show_animation
       PSP.move_animation(spa, spb, skill.id, launcher.position < 0)
 =begin
       @animator = Yuki::Basic_Animator.new(ChargeAnimation, 
         spa, spb) 
-      
+
       while @animator.update
         Graphics.update unless Input.press?(:B)
       end
@@ -62,17 +60,17 @@ class Scene_Battle
 =end
     end
   end
-  
+
   def global_animation(id)
     PSP.animation(@actor_sprites[0],id) if $options.show_animation
   end
-  
+
   def animation_on(target, id)
     enn = (target.position<0)
     spb = (enn ? @enemy_sprites[-target.position-1] : @actor_sprites[target.position])
     PSP.animation(spb,id) if $options.show_animation
   end
-  
+
   ShinyAnimation = load_data("Data/Animations/Shiny.dat")
   def animation_shiny(target, is_sprite = false)
     unless is_sprite

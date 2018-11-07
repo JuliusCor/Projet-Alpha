@@ -1,8 +1,6 @@
-# Header: psdk.pokemonworkshop.com/index.php/ScriptHeader
-# Author: Nuri Yuri
-# Date: 2014
-# Update: 2014-mm-dd
-# ScriptNorm: No
+#encoding: utf-8
+
+#noyard
 # Description: Définition de fonctions utiles ou d'animations pendant la phase 4
 class Scene_Battle
   #===
@@ -105,11 +103,11 @@ class Scene_Battle
     #On scane tous les Pokémons de l'équipe affin de distribuer expérience
     getters.each_index do |j|
       i=getters[j] #Pokémon recevant l'expérience
-      
+
       #On passe au suivant si le Pokémon n'exste pas, est KO ou est déjà aux max level
       next if !i or i.dead?
       next if i.level>=GameData::MAX_LEVEL
-      
+
       base_exp=phase4_exp_calculation(pokemon,i) #Expérience récupérée de base
       if(j<$game_temp.vs_type)
         get_exp=base_exp*battle_turn/turn_sum/$game_temp.vs_type
@@ -118,7 +116,7 @@ class Scene_Battle
       end
       #Bonus du multi-exp (exp_totale*50%) // critère 4G
       get_exp+=(base_exp/2) if(i.item_holding == 216 and j>=$game_temp.vs_type)
-      
+
       next if get_exp==0
       base_exp=i.exp #Expérience de base
       i.add_bonus(pokemon.battle_list) #Distribution des EVs
@@ -132,9 +130,12 @@ class Scene_Battle
         exp_lvl=i.exp_list[i.level+1].to_i
         exp=(exp_lvl-i.exp_list[i.level])/40
         exp=1 if exp<=0
-        
+
         #Mise à jour de l'expérience pour le niveau actuel (40 frames = 1 niveau)
+        Audio.me_play("Audio/ME/2G_Experience")
+        Graphics.wait(4)
         40.times do
+          Graphics.wait(1)
           i.exp+=exp
           break if i.exp>exp_lvl or i.exp>(base_exp+get_exp)
           #Si le Pokémon n'est pas sur le terrain on ne met pas la barre à jour
@@ -144,7 +145,7 @@ class Scene_Battle
             update_animated_sprites
           end
         end
-        
+        Audio.me_stop
         #Ici on recalibre l'expérience totale
         i.exp=exp_lvl if i.exp>exp_lvl
         i.exp=(base_exp+get_exp) if i.exp>(base_exp+get_exp)
@@ -153,7 +154,7 @@ class Scene_Battle
           Graphics.update
           update_animated_sprites
         end
-        
+
         #Si on est au dessus de l'exp nécessaire au niveau, on level up !
         if i.exp >= exp_lvl
           list = i.level_up_stat_refresh
@@ -197,7 +198,7 @@ class Scene_Battle
           i.check_skill_and_learn
           @_Evolve<<i unless @_Evolve.include?(i)
         end
-        
+
         #Mise à jour de l'exp donnée pour savoir si on arrête ou non la boucle
         given=i.exp-base_exp
       end
@@ -227,7 +228,7 @@ class Scene_Battle
     Graphics.transition
     return [2,return_data,i.position]
   end
-    #===
+  #===
   #>phase4_enemie_select_pkmn
   #Vérification de la possibilité d'envoyer un autre ennemi
   #===
@@ -297,7 +298,7 @@ class Scene_Battle
     a=(hpmax-hp)*rate*bs*bb/hpmax
     b=(0xFFFF*(a/255.0)**0.25).to_i
     cnt=0
-    3.times do |i|
+    4.times do |i|
       cnt+=1 if(rand(0xFFFF)<b)
     end
     return phase4_animation_capture(cnt,pokemon,id)
@@ -361,7 +362,7 @@ class Scene_Battle
   end
   #===
   #>phase4_animation_capture
-  #Animation de la capture //!!!\\ A terminer ! ( FAIT pour la 2G )
+  #Animation de la capture //!!!\\ A terminer !
   #===
   def phase4_animation_capture(cnt,pokemon,id)
     init_catch
@@ -407,7 +408,7 @@ class Scene_Battle
     @ball_top.z = 44001
     @ball_top.visible = false
   end
-  
+
   #-_-# ANIMATION DE LANCER #-_-#
   def gr_launch_ball_to_enemy
     @waitings = 0
@@ -521,7 +522,7 @@ class Scene_Battle
     @ball_caught.src_rect.set(0,24,24,24)
     @ball_caught.y -= 8
   end
-  
+
   #-_-# ANIMATION DU REBOND #-_-#
   def gr_catch_rebond
     #-_-# REBOND 1 #-_-#
@@ -699,6 +700,7 @@ class Scene_Battle
       Graphics.update
     end
   end
+  
   #===
   #>_phase4_status_check
   #Traitement des effets des status
@@ -780,7 +782,6 @@ class Scene_Battle
         #Tentative de fuite en 1v1 wild
         unless($game_temp.trainer_battle or $game_temp.vs_type==2)
           #r=display_message("Voulez-vous envoyer un autre Pokémon ?\n",false,1,"Oui","Non")
-          #@Window_Balls.visible = true
           r=display_message(_get(18, 80),true,1,_get(20, 55),_get(20, 56))
           if(r == 0)
             if(update_phase2_escape(true))

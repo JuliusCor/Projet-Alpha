@@ -1,8 +1,6 @@
-# Header: psdk.pokemonworkshop.com/index.php/ScriptHeader
-# Author: Nuri Yuri
-# Date: 2014
-# Update: 2014-mm-dd
-# ScriptNorm: No
+#encoding: utf-8
+
+#noyard
 # Description: Définition de la phase d'action du combat
 class Scene_Battle
   #===
@@ -10,6 +8,8 @@ class Scene_Battle
   #Lancement de la phase 4, initialisation de plusieurs choses
   #===
   def start_phase4
+    @a_remaining_pk.visible = false
+    @e_remaining_pk.visible = false if $game_temp.trainer_battle
     @phase = 4
     # Incrémentation du nombre de tours
     $game_temp.battle_turn += 1
@@ -76,11 +76,15 @@ class Scene_Battle
     when 2 #Changer de Pokémon
       phase4_switch_pokemon(@actions[@phase4_step])
     when 3
-      ::BattleEngine._msgp(19, 767, @actions[@phase4_step][1])
-      phase4_message_display
-      $game_system.se_play($data_system.escape_se)
-      battle_end(1)
-      return
+      if ::BattleEngine._can_switch(@actions[@phase4_step][1])
+        ::BattleEngine._msgp(19, 767, @actions[@phase4_step][1])
+        phase4_message_display
+        $game_system.se_play($data_system.escape_se)
+        battle_end(1)
+        return
+      else
+        ::BattleEngine._msgp(19, 878, @actions[@phase4_step][1])
+      end
     end
     _phase4_switch_check
     return unless $game_temp.in_battle
@@ -202,11 +206,11 @@ class Scene_Battle
     tmp_target = nil
     #AFAIRE !
     #Faire la vérification pour action[2]>=2 (choix du pokémon d'à coté) et <=-3
-    
+
     return unless action[3].position
     #<Selection de la cible
     #> Cas de l'attaque forcé
-    if action[2].class == Fixnum
+    if action[2].is_a?(Integer)
       if(action[2] < 0)
         target = [@actors[-action[2]-1]]
       else
@@ -304,8 +308,8 @@ class Scene_Battle
     @_launcher.battle_effect.apply_mind_reader(nil) if mind_reader
     @_launcher=nil if @actions[@phase4_step] == action #> Métronome & co
     #Refresh forcé des barres
-    @actor_bars.each do |i| i.refresh end
-    @enemy_bars.each do |i| i.refresh end
+    @actor_bars.each { |i| i.refresh }
+    @enemy_bars.each { |i| i.refresh }
     @_skill.used = true #> On indique que l'attaque a été utilisée
   end
 end

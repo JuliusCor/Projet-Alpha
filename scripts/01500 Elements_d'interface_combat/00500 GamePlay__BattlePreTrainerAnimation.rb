@@ -20,9 +20,6 @@ module GamePlay
       @unlocked = false
       @viewport = viewport
       @viewport.color.set(255, 255, 255, 0)
-      @background = Sprite.new(viewport)
-        .set_bitmap(Files[0], :transition)
-      
       #1
       @battler = ::Sprite.new(viewport)
         .set_bitmap($game_temp.enemy_battler[0] + "_sha", :battler)
@@ -207,8 +204,6 @@ module GamePlay
     # Effacement de tout le stuff affiché par la scene
     #===
     def dispose
-      @background.dispose
-      @background = nil
       @battler.dispose
       @battler = nil
       @battler2.dispose

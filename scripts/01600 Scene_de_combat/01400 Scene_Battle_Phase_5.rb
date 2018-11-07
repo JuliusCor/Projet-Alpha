@@ -1,8 +1,6 @@
-# Header: psdk.pokemonworkshop.com/index.php/ScriptHeader
-# Author: Nuri Yuri
-# Date: 2014
-# Update: 2017-03-04
-# ScriptNorm: No
+#encoding: utf-8
+
+#noyard
 # Description: Définition de la phase de fin du combat
 class Scene_Battle
   #===
@@ -52,8 +50,8 @@ class Scene_Battle
         $wild_battle.reset
         $game_temp.player_transferring = true
         $game_map.setup($game_temp.player_new_map_id = $game_variables[::Yuki::Var::E_Return_ID])
-        $game_temp.player_new_x = $game_variables[::Yuki::Var::E_Return_X] + ::Yuki::MapLinker::OffsetX
-        $game_temp.player_new_y = $game_variables[::Yuki::Var::E_Return_Y] + ::Yuki::MapLinker::OffsetY
+        $game_temp.player_new_x = $game_variables[::Yuki::Var::E_Return_X] + ::Yuki::MapLinker.get_OffsetX
+        $game_temp.player_new_y = $game_variables[::Yuki::Var::E_Return_Y] + ::Yuki::MapLinker.get_OffsetY
         $game_temp.player_new_direction = 8
         $game_switches[Yuki::Sw::FM_NoReset] = true
         $game_temp.common_event_id = 3 unless HomeMaps.include?($game_temp.player_new_map_id)
@@ -79,19 +77,18 @@ class Scene_Battle
   # Fin du combat de dresseur, affichage des dresseurs + phrase
   #===
   def phase5_trainer_end
-    tmp_sprite = ::Sprite.new()
-    if $game_variables[Yuki::Var::TrainerTransitionType] == 0
-      tmp_sprite.bitmap = ::RPG::Cache.battler($game_temp.enemy_battler[0] + "_sma")
-    else
-      tmp_sprite.bitmap = ::RPG::Cache.battler($game_temp.enemy_battler[0])
+    tmp_sprite = ::Sprite.new(nil)
+    tmp_sprite.set_bitmap($game_temp.enemy_battler[0] + "", :battler)
+    tmp_sprite.y = 0
+    tmp_sprite.x = 320
+    tmp_sprite.z = 48000
+    Graphics.sort_z
+    move = 20
+    move.times do |i|
+      Graphics.wait(1)
+      tmp_sprite.x -= 112/move
     end
-    width = tmp_sprite.bitmap.width
-    tmp_sprite.x = 160 + width
-    tmp_sprite.z = 2000
-    tmp_sprite.ox = tmp_sprite.bitmap.width/2
-    tmp_sprite.opacity = 0
-    @viewport.sort_z
-    
+    tone = @viewport.tone
     display_message($game_switches[Yuki::Sw::BT_Defeat] ? @victory_phrase : @defeat_phrase)
     if $game_switches[Yuki::Sw::BT_Victory]
       v = add_money($game_data_trainer[@trainer_class].base_money * @enemy_party.actors.last.level)
@@ -116,6 +113,7 @@ class Scene_Battle
         $pokedex.mark_captured(pkmn.id)
         if $game_switches[::Yuki::Sw::Pokedex]
           display_message(_parse(18, 68, PKNAME[0] => pkmn.name))
+          Graphics.freeze
           GamePlay::Dex.new(pkmn.id).main
           Graphics.transition
         end
@@ -198,7 +196,7 @@ class Scene_Battle
     else
       pkmn.item_holding=GameData::CommonItem[off][ind]
     end
-    
+
   end
   #===
   #>phase5_ramassage_get_index(nb) : récupère le bon index dans le tableau

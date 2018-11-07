@@ -1,8 +1,6 @@
-# Header: psdk.pokemonworkshop.com/index.php/ScriptHeader
-# Author: Nuri Yuri
-# Date: 2014
-# Update: 2014-mm-dd
-# ScriptNorm: No
+#encoding: utf-8
+
+#noyard
 # Description: Définition de la phase de choix de l'action à réaliser
 class Scene_Battle
   #===
@@ -46,12 +44,12 @@ class Scene_Battle
   def update_phase2
     #> Actions forcés par le tutoriel
     forced_action = get_action
-    
+
     if !forced_action and Mouse.trigger?(:left) #>Souris
       forced_action, @action_index = @action_selector.mouse_action(@action_index)
       @action_selector.pos_selector(@action_index)
     end
-    
+
     if Input.trigger?(:UP) and !forced_action or forced_action==:UP
       @action_index = 0 if(@action_index==2)
       @action_index = 1 if(@action_index==3)
@@ -72,7 +70,7 @@ class Scene_Battle
         start_phase2(@actor_actions.size-1)
       end
     end
-    
+
     #Reposition du sprite de selection
     @action_selector.pos_selector(@action_index)
   end
@@ -123,5 +121,5 @@ class Scene_Battle
       @to_start=:start_phase4
     end
   end
-  
+
 end

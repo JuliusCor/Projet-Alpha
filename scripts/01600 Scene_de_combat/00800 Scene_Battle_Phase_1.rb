@@ -1,13 +1,10 @@
-# Header: psdk.pokemonworkshop.com/index.php/ScriptHeader
-# Author: Nuri Yuri
-# Date: 2014
-# Update: 2014-mm-dd
-# ScriptNorm: No
+#encoding: utf-8
+
+#noyard
 # Description: Définition de la phase d'initialisation du combat
 class Scene_Battle
   WindowBalls = ["battlebar_actor_balls","battlebar_enemy_balls"]
   OpenBall = "animation/ball_animation"
-  Back_player = ["Back_Player","Back_Player_b"]
   BallCaught = "ball_caught"
   #===
   #>start_phase1
@@ -48,9 +45,14 @@ class Scene_Battle
     #L'équipe ennemie est normalement initialisée donc on clone le tableau d'ennemis
     @enemies=@enemy_party.actors.clone
     @back_player=Sprite.new(@viewport)
-    @back_player.bitmap=RPG::Cache.interface(Back_player[1])
+    @back_player.bitmap=RPG::Cache.interface("Back_Player")
     @back_player.set_position(416,96)
     @back_player.z = 44000
+    if($trainer.playing_girl)
+      @back_player.src_rect.set(96,0,96,96)
+    else
+      @back_player.src_rect.set(0,0,96,96)
+    end
     @backframe = 0
     @state = 0
     #Sprite d'animation de la capture
@@ -83,11 +85,7 @@ class Scene_Battle
     @e_window_Balls.bitmap=RPG::Cache.interface(WindowBalls[1])
     @e_window_Balls.set_position(18,32)
     @e_window_Balls.z = 15000
-    if $game_temp.trainer_battle
-      @e_remaining_pk.visible = @e_window_Balls.visible = true
-    else
-      @e_remaining_pk.visible = @e_window_Balls.visible = false
-    end
+    @e_remaining_pk.visible = @e_window_Balls.visible = false
     #Initialisation des effets des Pokémons
     (@actors+@enemies).each do |i|
       phase1_init_pokemon(i)
@@ -106,24 +104,7 @@ class Scene_Battle
     #@to_start=:start_phase2
     @to_start=:phase1_show_ability
   end
-  
-  def move_back
-    Graphics.wait(1)
-    @back_player.x -= 3.4809
-    @backframe += 1
-    move_back if(@backframe <= 110)
-    if(@backframe >= 110 and @state == 0)
-      @state =+ 1
-      @a_window_Balls.visible = @a_remaining_pk.visible = true
-      @back_player.bitmap=RPG::Cache.interface(Back_player[0])
-      if($trainer.playing_girl)
-        @back_player.src_rect.set(96,0,96,96)
-      else
-        @back_player.src_rect.set(0,0,96,96)
-      end
-      Audio.se_play("Audio/SE/2G_Bip_Battle.wav")
-    end
-  end
+
   #===
   #>Méthode de calibrage du Pokémon pour le combat
   #===
@@ -141,6 +122,7 @@ class Scene_Battle
       pkmn.battle_item=pkmn.item_holding
     end
   end
+
   #===
   #> Méthode d'affichage des talents qui s'activent lors du lancé des Pokémon
   #===

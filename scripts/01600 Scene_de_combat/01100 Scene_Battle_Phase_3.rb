@@ -1,8 +1,6 @@
-# Header: psdk.pokemonworkshop.com/index.php/ScriptHeader
-# Author: Nuri Yuri
-# Date: 2014
-# Update: 2014-mm-dd
-# ScriptNorm: No
+#encoding: utf-8
+
+#noyard
 # Description: Définition de la phase de choix de l'attaque à réaliser
 class Scene_Battle
   StruggleSkill = ::PFM::Skill.new(165) #< Battle Engine n'est pas dispo à ce point de la compilation
@@ -22,6 +20,7 @@ class Scene_Battle
       @actor_actions.push([0,actor.skills_set.index(actor.battle_effect.encore_skill).to_i,
       util_targetselection_automatic(actor, actor.battle_effect.encore_skill),actor])
     end
+
     #>Récupération de l'index d'une attaque "valide"
     @atk_index=0
     4.times do |i|
@@ -32,7 +31,7 @@ class Scene_Battle
     @skill_selector.visible = true
     #@message_window.visible = false
     0 while get_action
-    
+
     launch_phase_event(3,true)
   end
   #===
@@ -41,7 +40,7 @@ class Scene_Battle
   #===
   def update_phase3
     forced_action = get_action
-    
+
 =begin
     if(!forced_action and Mouse.trigger?(:left))
       if(atk_index = @skill_selector.mouse_action)
@@ -50,7 +49,7 @@ class Scene_Battle
       end
     end
 =end
-    
+
     #@skill_selector.update
     if Input.repeat?(:LEFT) and !forced_action or forced_action==:LEFT
       @atk_index=0

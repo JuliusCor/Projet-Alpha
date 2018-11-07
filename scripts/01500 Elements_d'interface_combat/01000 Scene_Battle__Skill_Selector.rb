@@ -7,7 +7,7 @@ class Scene_Battle
     # Creates a new Skill Selector
     def initialize
       @background = Sprite.new
-        .set_bitmap("choice_skill", :interface)
+        .set_bitmap("battle/skill_1", :interface)
       @background.z = 10005
       @selector = Sprite.new
         .set_bitmap("cursor_black", :interface)
