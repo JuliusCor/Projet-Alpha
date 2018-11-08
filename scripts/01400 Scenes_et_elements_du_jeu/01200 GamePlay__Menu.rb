@@ -6,8 +6,6 @@
 # Description: Définition du Menu principal
 module GamePlay
   class Menu < Base
-    Background="Menu_background"
-    Text= ["Menu_Text_1","Menu_Text_2","Menu_Text_3","Menu_Text_4","Menu_Text_5","Menu_Text_6","Menu_Text_7","Menu_Text_8"]
     attr_accessor :call_skill_process
     def initialize
       super
@@ -26,9 +24,12 @@ module GamePlay
       @index=$game_temp.last_menu_index
       #OK
       @Menu_Sprite=Sprite.new(@viewport)
-      @Menu_Sprite.bitmap=RPG::Cache.interface(Background)
+      @Menu_Sprite.bitmap=RPG::Cache.interface("Start_Menu")
+      @Menu_Sprite.x = 160
       @Menu_Sprite_Text=Sprite.new(@viewport)
-      @Menu_Sprite_Text.bitmap=RPG::Cache.interface(Text)
+      @Menu_Sprite_Text.bitmap=RPG::Cache.interface("Start_Menu_Sub")
+      @Menu_Sprite_Text.src_rect.set(0,0,160,80)
+      @Menu_Sprite_Text.y = 208
       #OK
       @sprites=Array.new(@conditions.size)
       @conditions.each_index do |i|
@@ -132,24 +133,7 @@ module GamePlay
       @sprites.each_index do |i|
         @sprites[i].set_selected_state(@index==i)
       end
-      case @index
-      when 0 #Pokédex
-        @Menu_Sprite_Text.bitmap=RPG::Cache.interface(Text[0])
-      when 1 #Equipe
-        @Menu_Sprite_Text.bitmap=RPG::Cache.interface(Text[1])
-      when 2 #Sac
-        @Menu_Sprite_Text.bitmap=RPG::Cache.interface(Text[2])
-      when 3 #pokematos
-        @Menu_Sprite_Text.bitmap=RPG::Cache.interface(Text[3])
-      when 4 #Carte de dresseur
-        @Menu_Sprite_Text.bitmap=RPG::Cache.interface(Text[4])
-      when 5 #Sauvegarder
-        @Menu_Sprite_Text.bitmap=RPG::Cache.interface(Text[5])
-      when 6 #Options
-        @Menu_Sprite_Text.bitmap=RPG::Cache.interface(Text[6])
-      else #Quitter
-        @Menu_Sprite_Text.bitmap=RPG::Cache.interface(Text[7])
-      end
+      @Menu_Sprite_Text.src_rect.set(0,80+80*@index,160,80)
     end
     
     def dispose

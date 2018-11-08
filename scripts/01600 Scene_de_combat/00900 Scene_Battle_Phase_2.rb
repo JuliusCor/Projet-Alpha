@@ -8,6 +8,8 @@ class Scene_Battle
   #===
   include UI
   def start_phase2(index=0)
+  	@action_selector.dispose
+  	@action_selector=Action_Selector.new
     @a_remaining_pk.visible = @a_window_Balls.visible = false
     @e_remaining_pk.visible = @e_window_Balls.visible = false
     # Remise à 0 de l'avancement de la phase 4 (on passe forcément ici)
@@ -63,14 +65,17 @@ class Scene_Battle
       @action_index = 1 if(@action_index==0)
       @action_index = 3 if(@action_index==2)
     elsif Input.trigger?(:A) and !forced_action or forced_action==:A
-      return on_phase2_validation
+      if(@safari != true)
+        return on_phase2_validation
+      else
+        return on_phase2_validation_safari
+      end
     elsif Input.trigger?(:B) and !forced_action or forced_action==:B
       if @actor_actions.size>0 and @actor_actions[-1][0] != 1 #> Empêchement du retour pour les objets
         $game_system.se_play($data_system.decision_se)
         start_phase2(@actor_actions.size-1)
       end
     end
-
     #Reposition du sprite de selection
     @action_selector.pos_selector(@action_index)
   end

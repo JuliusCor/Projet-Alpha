@@ -504,11 +504,13 @@ class Window_Message < Game_Window
     return if @gold_window
     @gold_window = ::Game_Window.new(self.viewport)
     wb = @gold_window.window_builder = ::GameData::Windows::MessageGold
-    @gold_window.y = 2
     @gold_window.z = self.z + 1
-    @gold_window.width = 96 + self.windowskin.width - wb[2]
-    @gold_window.height = 32 + self.windowskin.height - wb[3]
-    @gold_window.x = 318 - @gold_window.width
+    #@gold_window.width = 96 + self.windowskin.width - wb[2]
+    @gold_window.width = 146
+    #@gold_window.height = 32 + self.windowskin.height - wb[3]
+    @gold_window.height = 32
+    #@gold_window.x = 318 - @gold_window.width
+    @gold_window.x = 320 - @gold_window.width
     @gold_window.windowskin = self.windowskin
     @gold_window.add_text(0, 0, 96, 16, ::GameData::Text.get(11, 6))
     @gold_window.add_text(0, 16, 96, 16, ::PFM::Text.parse(11, 9, ::PFM::Text::NUM7R => $pokemon_party.money.to_s), 2)

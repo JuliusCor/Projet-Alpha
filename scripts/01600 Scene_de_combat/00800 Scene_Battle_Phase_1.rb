@@ -127,14 +127,16 @@ class Scene_Battle
   #> Méthode d'affichage des talents qui s'activent lors du lancé des Pokémon
   #===
   def phase1_show_ability
-    pkmn = nil
-    (battlers = BattleEngine.get_battlers).each do |pkmn|
-      switch_turn_entry_hasard(pkmn)
-    end
-    battlers.each do |pkmn|
-      BattleEngine::Abilities.on_launch_ability(pkmn)
-    end
-    phase4_message_display
+  	if(@safari != true)
+	  pkmn = nil
+	  (battlers = BattleEngine.get_battlers).each do |pkmn|
+	    switch_turn_entry_hasard(pkmn)
+	  end
+	  battlers.each do |pkmn|
+	    BattleEngine::Abilities.on_launch_ability(pkmn)
+	  end
+	  phase4_message_display
+	end
     @to_start=:start_phase2
   end
 end

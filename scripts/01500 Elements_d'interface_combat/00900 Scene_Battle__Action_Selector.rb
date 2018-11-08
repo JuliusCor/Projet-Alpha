@@ -7,7 +7,8 @@ class Scene_Battle
     # Creates a new Action Selector interface
     def initialize
       super(nil)
-      push(96, 194, "battle/choice_1").z = 10005 if($game_switches[153] != true)
+      @safari = $game_switches[153]
+      push(96, 194, "battle/choice_1").z = 10005 if(@safari != true)
       @select_sprite = push(0, 0, "cursor_black")
       @select_sprite.z = z = 10006
       #-_-_-_-_-# PATTERN #-_-_-_-_-#
@@ -16,9 +17,9 @@ class Scene_Battle
       #-_-_-_-_-# PATTERN #-_-_-_-_-#
       @textx = 128
       @texty = 224
-      if($game_switches[153] == true)
+      if(@safari == true)
         @textx = 32
-        add_text(@textx, @texty, 100, 16, "BALLx" + $game_variables[113].to_s, 0, color: 0).z = z            # => SAFARI : BALL
+        @balltext = add_text(@textx, @texty, 100, 16, "BALLx" + $game_variables[113].to_s, 0, color: 0).z = z            # => SAFARI : BALL
         add_text(@textx+168, @texty, 100, 16, "APPAT", 0, color: 0).z = z        # => SAFARI : APPAT
         add_text(@textx, @texty+32, 100, 16, "CAILLOU", 0, color: 0).z = z      # => SAFARI : CAILLOU
         add_text(@textx+168, @texty+32, 100, 16, _get(32,3), 0, color: 0).z = z  # => SAFARI : FUITE
@@ -31,6 +32,7 @@ class Scene_Battle
       self.visible = false
       self.pos_selector(0)
     end
+
     # Sets the position of the selector
     # @param action_index [Integer] the index of the action (0 to 3)
     def pos_selector(action_index)
@@ -41,19 +43,19 @@ class Scene_Battle
       case action_index
       when 0 #> Attaquer
         sprite.x = 114
-        sprite.x -= 96 if($game_switches[153] == true)
+        sprite.x -= 96 if(@safari == true)
         sprite.y = 224
       when 1 #> Pokémon
         sprite.x = 114 + 96
-        sprite.x -= 24 if($game_switches[153] == true)
+        sprite.x -= 24 if(@safari == true)
         sprite.y = 224
       when 2 #> Sac
         sprite.x = 114
-        sprite.x -= 96 if($game_switches[153] == true)
+        sprite.x -= 96 if(@safari == true)
         sprite.y = 224 + 32
       else #> Fuite
         sprite.x = 114 + 96
-        sprite.x -= 24 if($game_switches[153] == true)
+        sprite.x -= 24 if(@safari == true)
         sprite.y = 224 + 32
       end
     end
@@ -72,12 +74,6 @@ class Scene_Battle
     # @return [Array(Symbol, Integer)] forced_action, new_index
     # @note forced_action return can be nil
     def mouse_action(index)
-      mx, my = @stack[0].translate_mouse_coords
-      return :A, 0 if ATK[0].include?(mx) and ATK[1].include?(my)
-      return :A, 1 if POK[0].include?(mx) and POK[1].include?(my)
-      return :A, 2 if BAG[0].include?(mx) and BAG[1].include?(my)
-      return :A, 3 if RUN[0].include?(mx) and RUN[1].include?(my)
-      return nil, index
     end
   end
 end

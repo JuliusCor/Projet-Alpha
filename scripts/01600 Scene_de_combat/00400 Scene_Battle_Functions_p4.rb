@@ -294,6 +294,9 @@ class Scene_Battle
         rate += 20
       end
     end
+    if(@safari == true)
+      rate += @chance_capture
+    end
     #Taux préliminaires
     a=(hpmax-hp)*rate*bs*bb/hpmax
     b=(0xFFFF*(a/255.0)**0.25).to_i
@@ -365,6 +368,9 @@ class Scene_Battle
   #Animation de la capture //!!!\\ A terminer !
   #===
   def phase4_animation_capture(cnt,pokemon,id)
+    @message_window.auto_skip = true
+    display_message(_parse(18,292, TRNAME[0] => $trainer.name))
+    Graphics.wait(5)
     init_catch
     #>Recuperation du pokémon adverse
     @poke_sprite = gr_get_pokemon_sprite(pokemon)
@@ -390,6 +396,7 @@ class Scene_Battle
     else
       gr_animate_not_captured
       display_message(_parse(18, 63+rand(4)))
+      return phase2_safari_after_ball if(@safari == true)
     end
   end
 

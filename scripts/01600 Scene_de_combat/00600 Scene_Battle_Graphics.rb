@@ -33,12 +33,12 @@ class Scene_Battle
     Audio.se_play(@enemies[0].cry)
     if($game_temp.vs_type == 1 or @enemies.size == 1)
       animation_shiny(animator.get_sprite(0), true) if @enemies[0].shiny
-      display_message(_parse(18,1, PKNAME[0] => @enemies[0].name))
+      display_message(_parse(18,1, PKNAME[0] => @enemies[0].name_upper))
     else
       Audio.se_play(@enemies[1].cry)
       animation_shiny(animator.get_sprite(0), true) if @enemies[0].shiny
       animation_shiny(animator.get_sprite(1), true) if @enemies[1].shiny
-      display_message(_parse(18,1, PKNAME[0] => @enemies[0].name)+"\n"+
+      display_message(_parse(18,1, PKNAME[0] => @enemies[0].name_upper)+"\n"+
       _parse(18,1, PKNAME[0] => @enemies[1].name))
     end
     animator.del_back
@@ -70,7 +70,7 @@ class Scene_Battle
   end
 
   def gr_actor_move
-    if($game_switches[153] != true)
+    if(@safari != true)
       @backframe = 60
       move_back
     end
@@ -167,9 +167,11 @@ class Scene_Battle
     @viewport.sort_z
     Graphics.transition
     gr_enemy_launch_sequence
-    gr_actor_launch_sequence if $game_variables[Yuki::Var::TrainerTransitionType] == 1
-    30.times { update_animated_sprites ; Graphics.update }
-    gr_actor_launch_sequence unless $game_variables[Yuki::Var::TrainerTransitionType] == 1
+    if($game_switches[153] != true)
+      gr_actor_launch_sequence if $game_variables[Yuki::Var::TrainerTransitionType] == 1
+      30.times { update_animated_sprites ; Graphics.update }
+      gr_actor_launch_sequence unless $game_variables[Yuki::Var::TrainerTransitionType] == 1
+    end
   end
   
   
