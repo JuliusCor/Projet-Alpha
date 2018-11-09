@@ -6,12 +6,14 @@
 # Description: Définition du Menu principal
 module GamePlay
   class Menu < Base
+    include Text::Util
+    include UI
     attr_accessor :call_skill_process
     def initialize
       super
       @viewport=Viewport.create(:main, 10_000)
       @under_viewport=Viewport.create(:main, 9_999)
-      
+      init_text(0, @viewport)
       @conditions=[$game_switches[Yuki::Sw::Pokedex], #Pokédex possédé
       $actors.size>0, #Possède un Pokémon
       !$bag.locked, #Sac
@@ -36,7 +38,14 @@ module GamePlay
         @sprites[i] = Menu_Item.new(@viewport,i,@conditions[i])
         @sprites[i].set_selected_state(true) if @index==i
       end
-      
+      #> SAFARI
+      if($game_switches[153] == true)
+        @safari_window = Sprite.new(@viewport)
+        @safari_window.bitmap=RPG::Cache.interface("Safari_Window")
+        @safari_pas = add_text(64, 14, 0, 16, $game_variables[115].to_s, 2).z = 50000
+        @safari_max = add_text(66, 14, 0, 16, "/" + $game_variables[114].to_s).z = 50000
+        @safari_ball = add_text(18, 40, 0, 16, "BALLx" + $game_variables[113].to_s).z = 50000
+      end
       @shown=false
       @running=true
     end

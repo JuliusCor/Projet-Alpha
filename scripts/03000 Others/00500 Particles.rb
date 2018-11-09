@@ -9,9 +9,9 @@ module Yuki
     # The particle data
     Data=Array.new
     Data[0]=Hash.new
-    Data[0][1]={#,:oy_offset=>-2
-    :enter=>{:max_counter=>16,:data=>[{:file=>"Herbe",:rect=>[0,0,16,16],:zoom=>1,:position=>:center_pos},nil,nil,nil,{:rect=>[0,16,16,16]},nil,nil,nil,{:rect=>[0,32,16,16]},nil,nil,nil,{:rect=>[0,48,16,16]}],:loop=>false},
-    :stay =>{:max_counter=>1,:data=>[{:file=>"Herbe",:zoom=>1,:position=>:center_pos,:rect=>[0,48,16,16]}],:loop=>true},
+    Data[0][1]={
+    :enter=>{:max_counter=>16,:data=>[{:file=>"Herbe",:rect=>[0,0,32,32],:zoom=>1,:position=>:character_pos, :ox_offset => 0, :oy_offset => 4},nil,nil,nil,{:rect=>[0,0,32,32]},nil,nil,nil,{:rect=>[0,32,32,32]},nil,nil,nil,{:rect=>[0,32,32,32]}],:loop=>false},
+    :stay =>{:max_counter=>1,:data=>[{:file=>"Herbe",:zoom=>1,:position=>:center_pos, :oy_offset => 0,:rect=>[0,64,32,32]}],:loop=>true},
     :leave=>{:max_counter=>1,:data=>[],:loop=>false}}
     Data[0][2]={
     :enter=>{:max_counter=>8,:data=>[nil,nil,nil,{:file=>"HauteHerbe",:zoom=>1,:position=>:center_pos}],:loop=>false},
@@ -19,9 +19,7 @@ module Yuki
     :leave=>{:max_counter=>1,:data=>[],:loop=>false}}
 
     Data[0][:exclamation] = {
-    :enter=>{:max_counter=>36,:data => 
-    [{:file=>"Exclamation",:zoom=>1,:position=>:center_pos, :add_z => 64, :oy_offset => 19}],
-    :loop=>false},
+    :enter=>{:max_counter=>36,:data =>[{:file=>"Exclamation",:zoom=>1,:position=>:center_pos, :add_z => 64, :oy_offset => 57, :ox_offset => 16}],:loop=>false},
     :stay=>{:max_counter=>2,:data=>[{:state => :leave}], :loop=>false},
     :leave =>Data[0][2][:leave]}
 
@@ -170,7 +168,9 @@ module Yuki
       @position_type=:center_pos
       @state=(on_tp ? :stay : :enter)
       @zoom = (zoom = ::Config::Specific_Zoom) ? zoom : ZoomDiv[1]#$zoom_factor.to_i]
+      @zoom = 1
       @add_z=@zoom
+      @add_z = 2
       @ox=0
       @oy=0
       @oy_off=0
@@ -246,12 +246,19 @@ module Yuki
         @ox = (d[2]*@sprite.zoom_x)/2
         @oy = (d[3]*@sprite.zoom_y)/2
       end
+      if action[:chara] || action[:rect]
+        @ox *= 2
+        @oy *= 2
+      end
+      if d=action[:ox_offset]
+        @ox_off=d
+      end
     end
     # Update the position of the particle sprite
     def update_sprite_position
       case @position_type
       when :center_pos
-        @sprite.x=((@x*128 - $game_map.display_x + 3) / 4 + 32)/@zoom
+        @sprite.x=((@x*128 - $game_map.display_x + 3) / 4 + 32)
         @sprite.y=((@y*128 - $game_map.display_y + 3) / 4 + 32)
         @sprite.z=@character.screen_z(0)/@zoom
         if @sprite.y>=@character.screen_y
@@ -260,14 +267,14 @@ module Yuki
           @sprite.z=(@character.screen_z(0)-1)#/@zoom
         end
         @sprite.y/=@zoom
-        @sprite.ox=@ox*@zoom
+        @sprite.ox=@ox * @zoom + @ox_off
         @sprite.oy=@oy * @zoom + @oy_off#(@oy+@oy_off)*@zoom
       when :character_pos
-        @sprite.x=@character.screen_x/@zoom
-        @sprite.y=@character.screen_y/@zoom
+        @sprite.x=@character.screen_x+16
+        @sprite.y=@character.screen_y
         @sprite.z=(@character.screen_z(0)+@add_z)/@zoom
-        @sprite.ox=@ox
-        @sprite.oy=@oy+@oy_off
+        @sprite.ox=@ox * @zoom + @ox_off
+        @sprite.oy=@oy * @zoom + @oy_off
       end
     end
     # Dispose the particle

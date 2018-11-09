@@ -1,179 +1,158 @@
+# Disable shadow processing
+Text::Util.send :remove_const, :DEFAULT_OUTILINE_SIZE
+Text::Util::DEFAULT_OUTILINE_SIZE = 0
+
+# Disable 1x1 tilemap to keep 2x2 tilemap
+Object.send :remove_const, :Yuri_Tilemap
+Yuri_Tilemap = Tilemap
+
+# Make the Tilemap viewport display with a little offset
+class Spriteset_Map
+  alias psdk_initialize initialize
+  # Initialize a new Spriteset_Map object
+  # @param zone [Integer, nil] the id of the zone where the player is
+  def initialize(zone = nil)
+    psdk_initialize(zone)
+    @viewport1.rect.set(0, nil, 512)
+    @viewport2.rect.set(0, nil, 512)
+    @viewport3.rect.set(0, nil, 512)
+  end
+end
+# Adjust the tilemap related constants
+Tilemap.send :remove_const, :NX
+Tilemap.send :remove_const, :NY
+Tilemap::NX = 12
+Tilemap::NY = 12
+Yuki::MapLinker.send :remove_const, :OffsetX
+Yuki::MapLinker.send :remove_const, :OffsetY
+Yuki::MapLinker::OffsetX = 5
+Yuki::MapLinker::OffsetY = 4
+Game_Player.send :remove_const, :CENTER_X
+Game_Player.send :remove_const, :CENTER_Y
+Game_Player::CENTER_X = (160 - 16) * 4
+Game_Player::CENTER_Y = (144 - 16) * 4
+
+# Adjust character shadow
 class Sprite_Character
-  def zoom=(v)
-    super(2 * v)
+  # Force zoom to 1
+  # @param value [Numeric] desired zoom
+  def zoom=(value)
+    super(2 * value)
   end
-  def zoom_x
-    super / 2
-  end
-  # Initialize the shadow display
-  def init_shadow
-    @shadow = Sprite.new(self.viewport)
-    @shadow.bitmap = bmp = RPG::Cache.character(Shadow_File)
-    @shadow.src_rect.set(0,0, bmp.width / 4, bmp.height / 4)
-    @shadow.ox = bmp.width / 8
-    @shadow.oy = bmp.height / 4
-    @shadow.zoom = 2
+  
+  def update
+    #>On update RPG::Sprite uniquement si il y a une animation.
+    super if @_animation or @_loop_animation
+    # Vérification du changement de character
+    if @character_name != @character.character_name or @tile_id != @character.tile_id
+      @tile_id = @character.tile_id
+      @character_name = @character.character_name
+      if(@tile_id >= 384)
+        self.bitmap = RPG::Cache.tileset($game_map.tileset_name)
+        tile_id = @tile_id - 384
+        self.src_rect.set(tile_id % 8 * 32, tile_id / 8 * 32, 32, @height = 32)
+        self.zoom = 0.5#_x=self.zoom_y=(16*$zoom_factor)/32.0
+        self.ox = 16
+        self.oy = 32
+        @ch = 32
+      else
+        self.bitmap = RPG::Cache.character(@character_name, 0)
+        @cw = bitmap.width / 4
+        @height = @ch = bitmap.height / 4
+        self.ox = @cw / 2
+        self.oy = @ch
+        self.zoom = 1 if self.zoom_x != 1
+        self.src_rect.set(@character.pattern * @cw, (@character.direction - 2) / 2 * @ch, 
+        @cw, @ch)
+        @pattern = @character.pattern
+        @direction = @character.direction
+      end
+    end
+    # Position du chara sur l'écran
+    _x = self.x = @character.screen_x / @zoom
+    y = @character.screen_y
+    if add = @character.in_swamp
+      y += add == 1 ? 4 : 8
+    end
+    _y = self.y = y / @zoom
+    # Pseudo anti-lag
+    _x -= self.ox
+    _y -= self.oy
+    rc = self.viewport.rect
+    if _x > rc.width or _y > rc.height + 16 or (_x + self.width) < 0 or (_y + self.height) < 0
+      @shadow.visible = false if @shadow
+      return self.visible = false
+    else
+      self.visible = true
+    end
+    #Modification du morceau du character à afficher
+    if(@tile_id == 0)
+      eax = @character.pattern
+      if(@pattern != eax)
+        self.src_rect.x = eax*@cw
+        @pattern = eax
+      end
+      eax=@character.direction
+      if(@direction != eax)
+        self.src_rect.y=(eax - 2) / 2 * @ch
+        @direction=eax
+      end
+    end
+    # Superiorité
+    self.z = (@character.screen_z(@ch) + @add_z)# / @zoom
+    # Modification des propriétés d'affichage
+#    self.blend_type = @character.blend_type
+    self.bush_depth = @character.bush_depth
+    #>Devons nous supprimer la transparence du héros ? 
+    #Ca aurait très bien pu être fait avec l'opacité, 
+    #c'est con d'utiliser un truc qui touche uniquement le héros sur tous les charas :/
+    self.opacity = (@character.transparent ? 0 : @character.opacity)
+    # Animation
+    if @character.animation_id != 0
+      $data_animations    = load_data("Data/Animations.rxdata") unless $data_animations
+      animation = $data_animations[@character.animation_id]
+      animation(animation, true)
+      @character.animation_id = 0
+    end
+     
+    update_bush_depth if @bush_depth > 0
+    update_shadow if @shadow
   end
 end
-class Game_Character
-  # Return the x position of the shadow of the character on the screen
-  # @return [Integer]
-  def shadow_screen_x
-    return ((@real_x - $game_map.display_x + 3) / 8 + 8) * 2
-  end
-  # Return the y position of the shadow of the character on the screen
-  # @return [Integer]
-  def shadow_screen_y
-    return ((@real_y - $game_map.display_y + 3) / 8 + 17) * 2
-  end
-end
+
 module Config
   remove_const :Specific_Zoom
   Specific_Zoom = 1
 end
-class Game_Map
-  remove_const :CenterPlayer
-  CenterPlayer = false
-  # Scrolls the map down
-  # @param distance [Integer] distance in y to scroll
-  def scroll_down(distance)
-    unless CenterPlayer
-      @display_y = [@display_y + distance, (self.height - 7) * 128].min
+# Adjust the character x/y positions
+class Game_Character
+  # Return the x position of the sprite on the screen
+  # @return [Integer]
+  def screen_x
+    # 実座標とマップの表示位置から画面座標を求める
+    return (@real_x - $game_map.display_x + 3) / 4 + 16 # +3 => +5
+  end
+  # Return the y position of the sprite on the screen
+  # @return [Integer]
+  def screen_y
+    # 実座標とマップの表示位置から画面座標を求める
+    y = (@real_y - $game_map.display_y + 3) / 4 + 32 # +3 => +5
+    # ジャンプカウントに応じて Y 座標を小さくする
+    if @jump_count >= @jump_peak
+      n = @jump_count - @jump_peak
     else
-      @display_y = @display_y + distance
+      n = @jump_peak - @jump_count
     end
+    return y - (@jump_peak * @jump_peak - n * n) / 2
   end
-  # Scrolls the map right
-  # @param distance [Integer] distance in x to scroll
-  def scroll_right(distance)
-    unless CenterPlayer
-      @display_x = [@display_x + distance, (self.width - 10) * 128].min
-    else
-      @display_x = @display_x + distance
-    end
+  # Return the x position of the shadow of the character on the screen
+  # @return [Integer]
+  def shadow_screen_x
+    return (@real_x - $game_map.display_x + 3) / 4 + 16 # +3 => +5
   end
-end
-class Game_Player < Game_Character
-  remove_const :CENTER_X
-  remove_const :CENTER_Y
-  # 4 time the x position of the Game_Player sprite
-  CENTER_X = (160 - 16) * 4
-  # 4 time the y position of the Game_Player sprite
-  CENTER_Y = (144 - 16) * 4
-  # Adjust the map display according to the given position
-  # @param x [Integer] the x position on the MAP
-  # @param y [Integer] the y position on the MAP
-  def center(x, y)
-    max_x = ($game_map.width - 10) * 128
-    max_y = ($game_map.height - 7) * 128
-    $game_map.display_x = [0, [x * 128 - CENTER_X, max_x].min].max
-    $game_map.display_y = [0, [y * 128 - CENTER_Y, max_y].min].max
-  end
-end
-class Spriteset_Map
-  # Tilemap initialization
-  def init_tilemap
-    # タイルマップを作成
-    #>Adapter en fonction du jeu, sur Pokémon SDK 2x2 => 32x32
-    tilemap_class = Tilemap
-    if @tilemap.class != tilemap_class
-      @tilemap.dispose if @tilemap
-      @tilemap = tilemap_class.new(@viewport1)
-    end
-    @tilemap.tileset = RPG::Cache.tileset($game_map.tileset_name)
-    7.times do |i|
-      filename = $game_map.autotile_names[i] + '_._tiled'
-      filename = $game_map.autotile_names[i] unless RPG::Cache.autotile_exist?(filename)
-      @tilemap.autotiles[i] = RPG::Cache.autotile(filename)
-    end
-    @tilemap.map_data = $game_map.data
-    @tilemap.priorities = $game_map.priorities
-    @tilemap.reset
-  end
-end
-class Tilemap
-  remove_const :NX
-  remove_const :NY
-  # Number of tiles drawn on X axis
-  NX = 12
-  # Number of tiles drawn on Y axis
-  NY = 12
-end
-module Yuki
-  # MapLinker, script that emulate the links between maps. This script also display events.
-  # @author Nuri Yuri
-  module MapLinker
-    remove_const :OffsetX
-    remove_const :OffsetY
-    # The offset in X until we see black borders
-    OffsetX = 5
-    # The offset in Y until we seen black borders
-    OffsetY = 4
-  end
-end
-module Yuki
-  class Particle_Object
-    def initialize(character,data,on_tp=false)
-      @x=character.x
-      @y=character.y
-      @character=character
-      @map_id=$game_map.map_id
-      @sprite=::Sprite.new(Particles.viewport)
-      @sprite.zoom = 2
-      @data=data
-      @counter=0
-      @position_type=:center_pos
-      @state=(on_tp ? :stay : :enter)
-      @zoom = (zoom = ::Config::Specific_Zoom) ? zoom : ZoomDiv[1]#$zoom_factor.to_i]
-      @add_z=@zoom
-      @ox=0
-      @oy=0
-      @oy_off=0
-    end
-    # Execute an animation instruction
-    # @param action [Hash] the animation instruction
-    def exectute_action(action)
-      if d=action[:state]
-        @state = d
-      end
-      if d=action[:zoom]
-        @sprite.zoom=d*2#$zoom_factor
-      end
-      if d=action[:file] #Choix d'un fichier
-        @sprite.bitmap=RPG::Cache.particle(d)#Bitmap.new("Graphics/Particles/#{d}")
-        @ox = (@sprite.bitmap.width*@sprite.zoom_x)/2
-        @oy = (@sprite.bitmap.height*@sprite.zoom_y)/2
-      end
-      if d=action[:position]
-        @position_type=d
-      end
-      if d=action[:angle]
-        @sprite.angle=d
-      end
-      if d=action[:add_z]
-        @add_z=d
-      end
-      if d=action[:oy_offset]
-        @oy_off=d
-      end
-      if d=action[:opacity]
-        @sprite.opacity=d
-      end
-      #DOIS ETRE A LA FIN !
-      if d=action[:chara]
-        cw=@sprite.bitmap.width/4
-        ch=@sprite.bitmap.height/4
-        sx = @character.pattern * cw
-        sy = (@character.direction - 2) / 2 * ch
-        @sprite.src_rect.set(sx,sy,cw,ch)
-        @ox=(cw*@sprite.zoom_x)/2
-        @oy=(ch*@sprite.zoom_y)/2
-      end
-      if d=action[:rect] #choix d'un src_rect
-        @sprite.src_rect.set(*d)
-        @ox = (d[2]*@sprite.zoom_x)/2
-        @oy = (d[3]*@sprite.zoom_y)/2
-      end
-    end
+  # Return the y position of the shadow of the character on the screen
+  # @return [Integer]
+  def shadow_screen_y
+    return (@real_y - $game_map.display_y + 3) / 4 + 34 # +3 => +5
   end
 end
