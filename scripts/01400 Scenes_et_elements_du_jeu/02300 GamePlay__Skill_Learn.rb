@@ -269,7 +269,7 @@ module GamePlay
       stack.push(32, 192, nil, type: CategorySprite)
       stack.add_text(264, 172, 42, 16, :power_text, 1,  type: SymText)
       stack.add_text(264, 190, 42, 16, :accuracy_text, 1,  type: SymText)
-      stack.add_text(12, 212, 296, 22, :description,  type: SymMultilineText)
+      stack.add_text(12, 212, 296, 32, :description,  type: SymMultilineText)
       stack.add_text(16, 156, 68, 16, "TYPE/")
       stack.add_text(196, 174, 68, 16, "FOR/")
       stack.add_text(196, 192, 68, 16, "PRE/")

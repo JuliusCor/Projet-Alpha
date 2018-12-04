@@ -15,6 +15,7 @@ module GamePlay
       super()
       @viewport = Viewport.create(:main, 0)
       @descr_viewport = Viewport.create(18, 168, 320, 100)
+      @battle_viewport = Viewport.create(500, 500, 1, 1)
       @pokemon_descr = Text.new(0, @descr_viewport, 0, 0, 300, 32, nil.to_s).load_color(3)
       @background = Sprite.new(@viewport).set_bitmap(Background[0], :pokedex)
       # Liste

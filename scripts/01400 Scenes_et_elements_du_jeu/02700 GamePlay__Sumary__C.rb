@@ -18,20 +18,21 @@ module GamePlay
         #_Attaque_#
         4.times do |i|
           push_sprite(Skill_C.new(viewport, i))
+          push(160, 52+32*i, "PP")
         end
         #_Descriptions_#
-        add_text(16, 156, 68, 16, "TYPE/")
+        add_text(16, 160, 68, 16, "TYPE/")
         #push(32, 174, nil, type: Type1Sprite)
         #push(147, 129, nil,false,true, type: TypeSprite)
-        add_text(196, 174, 68, 16, "FOR/")
-        add_text(196, 192, 68, 16, "PRE/")
-        #APRENDREPOURLECOMBAT
+        add_text(192, 178, 68, 16, "FOR/")
+        add_text(192, 196, 68, 16, "PRE/")
+        #_Stats_#
         @skill_stack = {
-          category: CategorySprite.new(viewport).set_position(32, 192),
-          power: SymText.new(0, viewport, 264, 172, 42, 16, :power_text, 2),
-          accuracy: SymText.new(0, viewport, 264, 190, 42, 16, :accuracy_text, 2),
-          descr: SymMultilineText.new(0, viewport, 12, 212, 296, 22, :description),
-          type: TypeSprite.new(viewport).set_position(32, 174)
+          category: CategorySprite.new(viewport).set_position(32, 196),
+          power: SymText.new(0, viewport, 260, 176, 42, 16, :power_text, 2),
+          accuracy: SymText.new(0, viewport, 260, 194, 42, 16, :accuracy_text, 2),
+          descr: SymMultilineText.new(0, viewport, 14, 216, 296, 30, :description),
+          type: TypeSprite.new(viewport).set_position(32, 178)
         }
         #|----------      FIN       ----------|#
       end

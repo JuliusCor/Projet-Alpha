@@ -10,7 +10,7 @@ module Yuki
     Data=Array.new
     Data[0]=Hash.new
     Data[0][1]={
-    :enter=>{:max_counter=>16,:data=>[{:file=>"Herbe",:rect=>[0,0,32,32],:zoom=>1,:position=>:character_pos, :ox_offset => 0, :oy_offset => 4},nil,nil,nil,{:rect=>[0,0,32,32]},nil,nil,nil,{:rect=>[0,32,32,32]},nil,nil,nil,{:rect=>[0,32,32,32]}],:loop=>false},
+    :enter=>{:max_counter=>16,:data=>[{:file=>"Herbe",:rect=>[0,0,32,32],:zoom=>1,:position=>:character_pos, :ox_offset => 0, :oy_offset => 4},nil,nil,nil,nil,{:rect=>[0,0,32,32]},nil,nil,nil,nil,{:rect=>[0,32,32,32]},nil,nil,nil,nil,{:rect=>[0,32,32,32]}],:loop=>false},
     :stay =>{:max_counter=>1,:data=>[{:file=>"Herbe",:zoom=>1,:position=>:center_pos, :oy_offset => 0,:rect=>[0,64,32,32]}],:loop=>true},
     :leave=>{:max_counter=>1,:data=>[],:loop=>false}}
     Data[0][2]={
@@ -174,6 +174,7 @@ module Yuki
       @ox=0
       @oy=0
       @oy_off=0
+      @ox_off=0
     end
     # Update the particle animation
     def update

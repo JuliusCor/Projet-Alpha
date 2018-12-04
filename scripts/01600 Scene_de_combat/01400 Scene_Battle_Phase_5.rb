@@ -113,6 +113,7 @@ class Scene_Battle
         $pokedex.mark_captured(pkmn.id)
         if $game_switches[::Yuki::Sw::Pokedex]
           display_message(_parse(18, 68, PKNAME[0] => pkmn.name))
+          @message_window.visible = false
           Graphics.freeze
           GamePlay::Dex.new(pkmn.id).main
           Graphics.transition

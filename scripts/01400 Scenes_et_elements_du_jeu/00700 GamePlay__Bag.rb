@@ -226,7 +226,8 @@ module GamePlay
         cnt += 1
         @selector.y = 32 + cnt*32 if(i == @index)
         @quantity_text[cnt].visible = false
-        @textx[cnt].visible = i < size
+        #@textx[cnt].visible = i < size
+        @textx[cnt].visible = false
         @name_text[cnt].visible = i <= size
         if i >= size
           @name_text[cnt].text = _get(22, 7) if i == size
@@ -234,6 +235,7 @@ module GamePlay
         end
         @name_text[cnt].text = @item_names[i]
         if GameData::Item.limited_use?(@item_ids[i])
+          @textx[cnt].visible = true
           @quantity_text[cnt].visible = true
           @quantity_text[cnt].text = $bag.item_quantity(@item_ids[i]).to_s
         end
